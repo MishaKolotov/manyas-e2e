@@ -14,9 +14,25 @@ export class BasePage {
 
   /**
    * Install per-page storage cleanup BEFORE any script runs. Idempotent.
+   *
+   * Also seeds the OneTrust consent cookies on the base URL's host so the
+   * cookie banner stays out of the way during the funnel. The live app uses
+   * OneTrust for consent, and the banner sticks to the bottom of the screen
+   * — without dismissal it occludes survey Continue buttons on the iPhone
+   * 17 viewport. Pre-seeding `OptanonAlertBoxClosed` tells the SDK the user
+   * already responded, so the UI never mounts.
    */
   async installCleanState(): Promise<void> {
     await this.context.clearCookies();
+    const baseHost = new URL(this.env.baseUrl).hostname;
+    await this.context.addCookies([
+      {
+        name: 'OptanonAlertBoxClosed',
+        value: new Date().toISOString(),
+        domain: baseHost,
+        path: '/',
+      },
+    ]);
     await this.context.addInitScript(() => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
