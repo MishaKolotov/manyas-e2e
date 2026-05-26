@@ -25,6 +25,7 @@
 ## Task 1: Initialize git + project scaffold
 
 **Files:**
+
 - Create: `.gitignore`
 - Create: `package.json`
 - Create: `tsconfig.json`
@@ -34,15 +35,18 @@
 - [ ] **Step 1: Initialize git**
 
 Run:
+
 ```bash
 cd "/Users/gigamike666/Web Projects/Manyas e2e"
 git init -b main
 ```
+
 Expected: `Initialized empty Git repository ...`
 
 - [ ] **Step 2: Create .gitignore**
 
 Create `.gitignore`:
+
 ```
 node_modules/
 .env
@@ -59,6 +63,7 @@ playwright-report/
 - [ ] **Step 3: Create .nvmrc**
 
 Create `.nvmrc`:
+
 ```
 20
 ```
@@ -66,6 +71,7 @@ Create `.nvmrc`:
 - [ ] **Step 4: Create package.json**
 
 Create `package.json`:
+
 ```json
 {
   "name": "manyas-e2e",
@@ -99,6 +105,7 @@ Create `package.json`:
 - [ ] **Step 5: Create tsconfig.json**
 
 Create `tsconfig.json`:
+
 ```json
 {
   "compilerOptions": {
@@ -127,7 +134,8 @@ Create `tsconfig.json`:
 - [ ] **Step 6: Create minimal README.md**
 
 Create `README.md`:
-```markdown
+
+````markdown
 # Manyas E2E — Walking Survey Localization Tests
 
 End-to-end localization tests for the Walking Survey funnel at https://dev.slimkit.health/walking/survey/?stripeV64=true.
@@ -145,7 +153,9 @@ cp .env.example .env
 npm run i18n:import
 npm test
 ```
-```
+````
+
+````
 
 - [ ] **Step 7: Install runtime deps and dev deps**
 
@@ -162,7 +172,8 @@ npm install --save-dev \
   @typescript-eslint/parser@latest \
   @typescript-eslint/eslint-plugin@latest \
   prettier@latest
-```
+````
+
 Expected: dependencies installed, no errors. `package-lock.json` created.
 
 - [ ] **Step 8: Verify typecheck works**
@@ -182,6 +193,7 @@ git commit -m "chore: initial project scaffold (TypeScript, Playwright, deps)"
 ## Task 2: Add .env.example and dotenv loader
 
 **Files:**
+
 - Create: `.env.example`
 - Create: `src/config/env.ts`
 - Create: `tests/config/env.test.ts`
@@ -189,6 +201,7 @@ git commit -m "chore: initial project scaffold (TypeScript, Playwright, deps)"
 - [ ] **Step 1: Write failing test for env loader**
 
 Create `tests/config/env.test.ts`:
+
 ```ts
 import { test, expect } from '@playwright/test';
 import { loadEnv } from '../../src/config/env';
@@ -224,6 +237,7 @@ Expected: FAIL — `Cannot find module '../../src/config/env'`.
 - [ ] **Step 3: Implement env loader**
 
 Create `src/config/env.ts`:
+
 ```ts
 import 'dotenv/config';
 
@@ -264,6 +278,7 @@ export function loadEnv(): AppEnv {
 - [ ] **Step 4: Create .env.example**
 
 Create `.env.example`:
+
 ```
 BASIC_AUTH_USER=
 BASIC_AUTH_PASS=
@@ -275,10 +290,13 @@ FEATURE_FLAGS=stripeV64=true
 - [ ] **Step 5: Create local .env for development**
 
 Run:
+
 ```bash
 cp .env.example .env
 ```
+
 Then edit `.env` with real credentials:
+
 ```
 BASIC_AUTH_USER=dev
 BASIC_AUTH_PASS=gPgFCeJ7
@@ -286,11 +304,13 @@ BASE_URL=https://dev.slimkit.health
 SURVEY_PATH=/walking/survey/
 FEATURE_FLAGS=stripeV64=true
 ```
+
 Note: `.env` is in `.gitignore` — do not commit.
 
 - [ ] **Step 6: Create minimal playwright.config.ts to enable tests**
 
 Create `playwright.config.ts`:
+
 ```ts
 import { defineConfig } from '@playwright/test';
 
@@ -322,12 +342,14 @@ git commit -m "feat(config): typed env loader with required-vars validation"
 ## Task 3: Define supported locales
 
 **Files:**
+
 - Create: `src/config/locales.ts`
 - Create: `tests/config/locales.test.ts`
 
 - [ ] **Step 1: Write failing test**
 
 Create `tests/config/locales.test.ts`:
+
 ```ts
 import { test, expect } from '@playwright/test';
 import { SUPPORTED_LOCALES, getLocale } from '../../src/config/locales';
@@ -363,18 +385,9 @@ Expected: FAIL — module not found.
 - [ ] **Step 3: Implement locales config**
 
 Create `src/config/locales.ts`:
+
 ```ts
-export type LocaleCode =
-  | 'en'
-  | 'fr'
-  | 'it'
-  | 'es'
-  | 'ja'
-  | 'ru'
-  | 'de'
-  | 'pt'
-  | 'zh'
-  | 'ko';
+export type LocaleCode = 'en' | 'fr' | 'it' | 'es' | 'ja' | 'ru' | 'de' | 'pt' | 'zh' | 'ko';
 
 export interface LocaleDescriptor {
   code: LocaleCode;
@@ -425,12 +438,14 @@ git commit -m "feat(config): SUPPORTED_LOCALES with BCP-47 + timezone (pt varian
 ## Task 4: Define device descriptors
 
 **Files:**
+
 - Create: `src/config/devices.ts`
 - Create: `tests/config/devices.test.ts`
 
 - [ ] **Step 1: Write failing test**
 
 Create `tests/config/devices.test.ts`:
+
 ```ts
 import { test, expect } from '@playwright/test';
 import { DEVICES, getDevice } from '../../src/config/devices';
@@ -469,6 +484,7 @@ Expected: FAIL — module not found.
 - [ ] **Step 3: Implement devices config**
 
 Create `src/config/devices.ts`:
+
 ```ts
 export type DeviceCode = 'iphone17' | 'iphone16promax' | 's20e';
 
@@ -539,6 +555,7 @@ git commit -m "feat(config): custom device descriptors for iPhone17/16ProMax/S20
 ## Task 5: Excel-to-JSON importer (schema validation only)
 
 **Files:**
+
 - Create: `src/utils/excel-to-json.ts`
 - Create: `tests/utils/__importer-test-input.xlsx` (binary fixture, see step 2)
 - Create: `tests/utils/excel-to-json.test.ts`
@@ -550,6 +567,7 @@ This task implements the schema validation gate from spec §5.2 step 3. We split
 We need a small xlsx file with known content to TDD the importer against. Create it via a helper script.
 
 Create `tests/utils/build-test-fixture.ts`:
+
 ```ts
 import * as xlsx from 'xlsx';
 import * as path from 'path';
@@ -561,22 +579,80 @@ const wb = xlsx.utils.book_new();
 
 const sheet1Data = [
   ['key', 'en', 'ru', 'fr', 'de', 'it', 'pt', 'es', 'zh', 'ja', 'ko'],
-  ['intro_text_0', 'Walking', 'Ходьба', 'Marche', 'Gehen', 'Camminando', 'Caminhando', 'Caminando', '步行', 'ウォーキング', '걷는'],
-  ['intro_text_1', 'Lose weight', 'Похудеть', 'Perdre du poids', 'Abnehmen', 'Perdere peso', 'Perder peso', 'Bajar de peso', '减肥', '減量', '체중감량'],
+  [
+    'intro_text_0',
+    'Walking',
+    'Ходьба',
+    'Marche',
+    'Gehen',
+    'Camminando',
+    'Caminhando',
+    'Caminando',
+    '步行',
+    'ウォーキング',
+    '걷는',
+  ],
+  [
+    'intro_text_1',
+    'Lose weight',
+    'Похудеть',
+    'Perdre du poids',
+    'Abnehmen',
+    'Perdere peso',
+    'Perder peso',
+    'Bajar de peso',
+    '减肥',
+    '減量',
+    '체중감량',
+  ],
   ['ВАЖНАЯ ИНФОРМАЦИЯ !!!!', '', '', '', '', '', '', '', '', '', ''],
   ['', 'orphan en value', '', '', '', '', '', '', '', '', ''],
 ];
 xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet(sheet1Data), 'Sheet1');
 
 const sheet2Data = [
-  ['English', 'Russian', 'French', 'German', 'Italian', 'Portuguese', 'Spanish', 'Chinese', 'Japanese', 'Korean'],
-  ['What do you want?', 'Чего вы хотите?', 'Que voulez-vous?', 'Was möchten Sie?', 'Cosa vuoi?', 'O que você quer?', '¿Qué quieres?', '您想要什么？', '何が欲しいですか？', '무엇을 원하세요?'],
+  [
+    'English',
+    'Russian',
+    'French',
+    'German',
+    'Italian',
+    'Portuguese',
+    'Spanish',
+    'Chinese',
+    'Japanese',
+    'Korean',
+  ],
+  [
+    'What do you want?',
+    'Чего вы хотите?',
+    'Que voulez-vous?',
+    'Was möchten Sie?',
+    'Cosa vuoi?',
+    'O que você quer?',
+    '¿Qué quieres?',
+    '您想要什么？',
+    '何が欲しいですか？',
+    '무엇을 원하세요?',
+  ],
 ];
 xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet(sheet2Data), 'Sheet2');
 
 const sheet3Data = [
   ['key', 'en', 'ru', 'fr', 'de', 'it', 'pt', 'es', 'zh', 'ja', 'ko'],
-  ['paywall_title', 'Get started', 'Начать', 'Commencer', 'Loslegen', 'Inizia', 'Começar', 'Empezar', '开始', '始める', '시작'],
+  [
+    'paywall_title',
+    'Get started',
+    'Начать',
+    'Commencer',
+    'Loslegen',
+    'Inizia',
+    'Começar',
+    'Empezar',
+    '开始',
+    '始める',
+    '시작',
+  ],
 ];
 xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet(sheet3Data), 'Sheet3');
 
@@ -586,14 +662,17 @@ console.log('Wrote', out);
 ```
 
 Run:
+
 ```bash
 npx tsx tests/utils/build-test-fixture.ts
 ```
+
 Expected: prints `Wrote .../tests/utils/__importer-test-input.xlsx`.
 
 - [ ] **Step 2: Write failing schema-validation test**
 
 Create `tests/utils/excel-to-json.test.ts`:
+
 ```ts
 import { test, expect } from '@playwright/test';
 import * as path from 'path';
@@ -614,19 +693,13 @@ test('importXlsx throws if xlsx is missing', () => {
 
 test('importXlsx throws if Sheet1 lacks required column', () => {
   const wb = xlsx.utils.book_new();
-  xlsx.utils.book_append_sheet(
-    wb,
-    xlsx.utils.aoa_to_sheet([['key', 'en', 'ru']]),
-    'Sheet1',
-  );
+  xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([['key', 'en', 'ru']]), 'Sheet1');
   xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([[]]), 'Sheet2');
   xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([[]]), 'Sheet3');
   const tmpFile = path.join(os.tmpdir(), `bad-${Date.now()}.xlsx`);
   xlsx.writeFile(wb, tmpFile);
   try {
-    expect(() => importXlsx(tmpFile, os.tmpdir())).toThrow(
-      /missing required column/i,
-    );
+    expect(() => importXlsx(tmpFile, os.tmpdir())).toThrow(/missing required column/i);
   } finally {
     fs.unlinkSync(tmpFile);
   }
@@ -641,14 +714,13 @@ Expected: FAIL — module not found.
 - [ ] **Step 4: Implement schema validation skeleton**
 
 Create `src/utils/excel-to-json.ts`:
+
 ```ts
 import * as fs from 'fs';
 import * as path from 'path';
 import * as xlsx from 'xlsx';
 
-const REQUIRED_LOCALE_COLS = [
-  'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko',
-] as const;
+const REQUIRED_LOCALE_COLS = ['en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko'] as const;
 
 export interface ImportResult {
   totalKeys: number;
@@ -737,12 +809,14 @@ git commit -m "feat(import): xlsx schema validation (missing file/sheet/column)"
 ## Task 6: Importer — row filtering (Sheet1/Sheet3 keyed sheets)
 
 **Files:**
+
 - Modify: `src/utils/excel-to-json.ts`
 - Modify: `tests/utils/excel-to-json.test.ts`
 
 - [ ] **Step 1: Write failing tests for row classification**
 
 Append to `tests/utils/excel-to-json.test.ts`:
+
 ```ts
 import { classifyRow } from '../../src/utils/excel-to-json';
 
@@ -780,15 +854,11 @@ test('classifyRow: cyrillic key with only ru filled → RU_NOTE', () => {
 });
 
 test('classifyRow: normal key → ACCEPT', () => {
-  expect(classifyRow('intro_text_0', { en: 'Walking', ru: 'Ходьба' })).toBe(
-    'ACCEPT',
-  );
+  expect(classifyRow('intro_text_0', { en: 'Walking', ru: 'Ходьба' })).toBe('ACCEPT');
 });
 
 test('classifyRow: camelCase key → ACCEPT', () => {
-  expect(
-    classifyRow('fitnesLevel_title', { en: "What's your level?" }),
-  ).toBe('ACCEPT');
+  expect(classifyRow('fitnesLevel_title', { en: "What's your level?" })).toBe('ACCEPT');
 });
 ```
 
@@ -800,6 +870,7 @@ Expected: 7 new tests FAIL — `classifyRow` not exported.
 - [ ] **Step 3: Implement classifyRow**
 
 In `src/utils/excel-to-json.ts`, add this export above `importXlsx`:
+
 ```ts
 export type RowCategory = 'EMPTY' | 'MARKER' | 'EMOJI' | 'RU_NOTE' | 'ACCEPT';
 
@@ -809,7 +880,7 @@ const MARKER_RE = /[!?]{2,}/;
 
 export function classifyRow(
   key: string,
-  values: Partial<Record<typeof REQUIRED_LOCALE_COLS[number], string>>,
+  values: Partial<Record<(typeof REQUIRED_LOCALE_COLS)[number], string>>,
 ): RowCategory {
   const k = String(key).trim();
   if (!k || !values.en || !String(values.en).trim()) return 'EMPTY';
@@ -842,12 +913,14 @@ git commit -m "feat(import): row classification rules (EMPTY/MARKER/EMOJI/RU_NOT
 ## Task 7: Importer — value normalization + Sheet2 slugify
 
 **Files:**
+
 - Modify: `src/utils/excel-to-json.ts`
 - Modify: `tests/utils/excel-to-json.test.ts`
 
 - [ ] **Step 1: Write failing tests**
 
 Append to `tests/utils/excel-to-json.test.ts`:
+
 ```ts
 import { normalizeValue, slugifyEnglish } from '../../src/utils/excel-to-json';
 
@@ -884,6 +957,7 @@ Expected: 6 FAIL.
 - [ ] **Step 3: Implement helpers**
 
 In `src/utils/excel-to-json.ts`, add:
+
 ```ts
 export function normalizeValue(raw: string): string {
   return String(raw).replace(/ /g, ' ').replace(/⏎/g, '\n').trim();
@@ -914,12 +988,14 @@ git commit -m "feat(import): normalizeValue + slugifyEnglish for Sheet2 keys"
 ## Task 8: Importer — full end-to-end against fixture xlsx
 
 **Files:**
+
 - Modify: `src/utils/excel-to-json.ts`
 - Modify: `tests/utils/excel-to-json.test.ts`
 
 - [ ] **Step 1: Write failing e2e test**
 
 Append to `tests/utils/excel-to-json.test.ts`:
+
 ```ts
 import * as fs from 'fs';
 import * as os from 'os';
@@ -957,13 +1033,36 @@ test('importXlsx fails loud on duplicate keys', () => {
   const header = ['key', 'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko'];
   xlsx.utils.book_append_sheet(
     wb,
-    xlsx.utils.aoa_to_sheet([header, ['dup_key', 'A', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']]),
+    xlsx.utils.aoa_to_sheet([
+      header,
+      ['dup_key', 'A', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'],
+    ]),
     'Sheet1',
   );
-  xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([['English', 'Russian', 'French', 'German', 'Italian', 'Portuguese', 'Spanish', 'Chinese', 'Japanese', 'Korean']]), 'Sheet2');
   xlsx.utils.book_append_sheet(
     wb,
-    xlsx.utils.aoa_to_sheet([header, ['dup_key', 'B', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b']]),
+    xlsx.utils.aoa_to_sheet([
+      [
+        'English',
+        'Russian',
+        'French',
+        'German',
+        'Italian',
+        'Portuguese',
+        'Spanish',
+        'Chinese',
+        'Japanese',
+        'Korean',
+      ],
+    ]),
+    'Sheet2',
+  );
+  xlsx.utils.book_append_sheet(
+    wb,
+    xlsx.utils.aoa_to_sheet([
+      header,
+      ['dup_key', 'B', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+    ]),
     'Sheet3',
   );
   const tmp = path.join(os.tmpdir(), `dup-${Date.now()}.xlsx`);
@@ -985,6 +1084,7 @@ Expected: FAIL — importXlsx still stub.
 - [ ] **Step 3: Implement full importer**
 
 Replace the stub `importXlsx` body (and add helper) in `src/utils/excel-to-json.ts`:
+
 ```ts
 function readKeyedSheet(
   sheet: xlsx.WorkSheet,
@@ -1028,9 +1128,16 @@ function readSheet2(
   if (englishIdx === -1) return [];
   // header names → locale codes (Sheet2 uses language names not codes)
   const nameToCode: Record<string, string> = {
-    english: 'en', russian: 'ru', french: 'fr', german: 'de',
-    italian: 'it', portuguese: 'pt', spanish: 'es', chinese: 'zh',
-    japanese: 'ja', korean: 'ko',
+    english: 'en',
+    russian: 'ru',
+    french: 'fr',
+    german: 'de',
+    italian: 'it',
+    portuguese: 'pt',
+    spanish: 'es',
+    chinese: 'zh',
+    japanese: 'ja',
+    korean: 'ko',
   };
   const localeIdx: Record<string, number> = {};
   for (const c of REQUIRED_LOCALE_COLS) {
@@ -1152,6 +1259,7 @@ Expected: all tests pass.
 
 Run: `npm run i18n:import`
 Expected:
+
 - Files appear in `tests/fixtures/i18n/`: `en.json`, `fr.json`, ..., `ko.json`, `_meta.json` (11 files).
 - Console: `Imported N keys. Skipped: M.` (N should be around 1300–1500 based on xlsx size).
 
@@ -1170,12 +1278,14 @@ git commit -m "feat(import): full xlsx → per-locale JSON with skipped-rows aud
 ## Task 9: i18n:check guard script
 
 **Files:**
+
 - Create: `src/utils/i18n-check.ts`
 - Create: `tests/utils/i18n-check.test.ts`
 
 - [ ] **Step 1: Write failing test**
 
 Create `tests/utils/i18n-check.test.ts`:
+
 ```ts
 import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
@@ -1236,6 +1346,7 @@ Expected: FAIL — module not found.
 - [ ] **Step 3: Implement i18n-check**
 
 Create `src/utils/i18n-check.ts`:
+
 ```ts
 import * as fs from 'fs';
 import * as path from 'path';
@@ -1295,12 +1406,14 @@ git commit -m "feat(import): i18n:check guard (fails if xlsx newer than fixtures
 ## Task 10: i18n loader (read JSON fixtures at test time)
 
 **Files:**
+
 - Create: `src/utils/i18n-loader.ts`
 - Create: `tests/utils/i18n-loader.test.ts`
 
 - [ ] **Step 1: Write failing tests**
 
 Create `tests/utils/i18n-loader.test.ts`:
+
 ```ts
 import { test, expect } from '@playwright/test';
 import { loadTranslations, type Translations } from '../../src/utils/i18n-loader';
@@ -1329,6 +1442,7 @@ Expected: FAIL — module not found.
 - [ ] **Step 3: Implement loader**
 
 Create `src/utils/i18n-loader.ts`:
+
 ```ts
 import * as fs from 'fs';
 import * as path from 'path';
@@ -1352,9 +1466,7 @@ export function loadTranslations(locale: LocaleCode): Translations {
   if (hit) return hit;
   const file = path.join(FIXTURES_DIR, `${locale}.json`);
   if (!fs.existsSync(file)) {
-    throw new Error(
-      `Translations file missing: ${file}. Run \`npm run i18n:import\`.`,
-    );
+    throw new Error(`Translations file missing: ${file}. Run \`npm run i18n:import\`.`);
   }
   const data = JSON.parse(fs.readFileSync(file, 'utf8')) as Record<string, string>;
   const t: Translations = {
@@ -1391,12 +1503,14 @@ git commit -m "feat(i18n): loader with lazy cache and missing-key errors"
 ## Task 11: Projects matrix generation
 
 **Files:**
+
 - Create: `src/config/projects.ts`
 - Create: `tests/config/projects.test.ts`
 
 - [ ] **Step 1: Write failing tests**
 
 Create `tests/config/projects.test.ts`:
+
 ```ts
 import { test, expect } from '@playwright/test';
 import { buildProjects } from '../../src/config/projects';
@@ -1420,9 +1534,7 @@ test('project name format is locale__device__engine', () => {
     surveyPath: '/s/',
     featureFlags: 'a=1',
   });
-  expect(projects).toContainEqual(
-    expect.objectContaining({ name: 'ru__iphone17__webkit' }),
-  );
+  expect(projects).toContainEqual(expect.objectContaining({ name: 'ru__iphone17__webkit' }));
 });
 
 test('each project carries metadata with locale, device, engine', () => {
@@ -1449,6 +1561,7 @@ Expected: FAIL.
 - [ ] **Step 3: Implement projects builder**
 
 Create `src/config/projects.ts`:
+
 ```ts
 import type { Project } from '@playwright/test';
 import { SUPPORTED_LOCALES } from './locales';
@@ -1513,11 +1626,13 @@ git commit -m "feat(config): matrix project builder (60 = 10 locales × 3 device
 ## Task 12: Wire matrix into playwright.config.ts
 
 **Files:**
+
 - Modify: `playwright.config.ts`
 
 - [ ] **Step 1: Replace minimal config with full version**
 
 Replace the entire contents of `playwright.config.ts`:
+
 ```ts
 import { defineConfig } from '@playwright/test';
 import { loadEnv } from './src/config/env';
@@ -1556,15 +1671,17 @@ export default defineConfig({
 
 Run: `npx playwright test --list --reporter=list 2>&1 | head -20`
 Expected: list shows tests with project names like `[ru__iphone17__webkit]`. Total tests will be `(existing test count) × 60` — verify projects appear by grepping:
+
 ```bash
 npx playwright test --list 2>&1 | grep -oE '\[[^]]+\]' | sort -u | head -20
 ```
+
 Expected: 60 unique project labels.
 
 - [ ] **Step 3: Smoke run on one project**
 
 Run: `npx playwright test --project=en__iphone17__chromium tests/config/`
-Expected: existing config tests pass under the en__iphone17__chromium project.
+Expected: existing config tests pass under the en**iphone17**chromium project.
 
 - [ ] **Step 4: Commit**
 
@@ -1578,12 +1695,14 @@ git commit -m "feat(config): wire 60-project matrix into playwright.config.ts"
 ## Task 13: i18n fixture for tests (gives translations matching current project)
 
 **Files:**
+
 - Create: `src/fixtures/i18n.fixture.ts`
 - Create: `tests/fixtures/i18n.fixture.test.ts`
 
 - [ ] **Step 1: Write failing test**
 
 Create `tests/fixtures/i18n.fixture.test.ts`:
+
 ```ts
 import { test, expect } from '../../src/fixtures/i18n.fixture';
 
@@ -1603,6 +1722,7 @@ Expected: FAIL — module not found.
 - [ ] **Step 3: Implement i18n fixture**
 
 Create `src/fixtures/i18n.fixture.ts`:
+
 ```ts
 import { test as base } from '@playwright/test';
 import type { LocaleCode } from '../config/locales';
@@ -1641,9 +1761,11 @@ Run: `npx playwright test --project=en__iphone17__chromium tests/fixtures/i18n.f
 Expected: 1 pass.
 
 Then run for ru:
+
 ```bash
 npx playwright test --project=ru__iphone17__chromium tests/fixtures/i18n.fixture.test.ts
 ```
+
 Expected: 1 pass. The same test now reads `intro_text_0` = "Ходьба" from `ru.json`.
 
 - [ ] **Step 5: Commit**
@@ -1658,6 +1780,7 @@ git commit -m "feat(fixtures): i18n fixture derives translations from project.me
 ## Task 14: BasePage with state isolation + URL composition
 
 **Files:**
+
 - Create: `src/utils/wait-stable.ts`
 - Create: `src/utils/visual-checks.ts`
 - Create: `src/pages/BasePage.ts`
@@ -1667,6 +1790,7 @@ We need three utilities + BasePage in one task because BasePage uses them. Tests
 - [ ] **Step 1: Create wait-stable.ts**
 
 Create `src/utils/wait-stable.ts`:
+
 ```ts
 import type { Page } from '@playwright/test';
 
@@ -1683,13 +1807,12 @@ export async function waitForVisualStability(page: Page): Promise<void> {
   await page.evaluate(async () => {
     const imgs = Array.from(document.images);
     await Promise.all(
-      imgs.map(
-        (img) =>
-          img.complete && img.naturalHeight !== 0
-            ? Promise.resolve()
-            : new Promise<void>((resolve) => {
-                img.onload = img.onerror = () => resolve();
-              }),
+      imgs.map((img) =>
+        img.complete && img.naturalHeight !== 0
+          ? Promise.resolve()
+          : new Promise<void>((resolve) => {
+              img.onload = img.onerror = () => resolve();
+            }),
       ),
     );
   });
@@ -1700,14 +1823,13 @@ export async function waitForVisualStability(page: Page): Promise<void> {
 - [ ] **Step 2: Create visual-checks.ts**
 
 Create `src/utils/visual-checks.ts`:
+
 ```ts
 import { expect, type Locator, type Page } from '@playwright/test';
 
 export async function assertNoHorizontalOverflow(page: Page): Promise<void> {
   const overflow = await page.evaluate(
-    () =>
-      document.documentElement.scrollWidth >
-      document.documentElement.clientWidth,
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
   );
   expect(overflow, 'horizontal page scroll detected (long string broke layout?)').toBe(false);
 }
@@ -1730,6 +1852,7 @@ export async function assertButtonInViewport(button: Locator): Promise<void> {
 - [ ] **Step 3: Create BasePage**
 
 Create `src/pages/BasePage.ts`:
+
 ```ts
 import type { BrowserContext, Page } from '@playwright/test';
 import type { Translations } from '../utils/i18n-loader';
@@ -1803,6 +1926,7 @@ git commit -m "feat(pages): BasePage with state isolation, URL composition, visu
 ## Task 15: First spec — landing.spec.ts (red → green discovery loop)
 
 **Files:**
+
 - Create: `src/pages/LandingPage.ts`
 - Create: `tests/localization/landing.spec.ts`
 
@@ -1811,12 +1935,15 @@ This task does TDD against the **live application**. We start with a deliberatel
 - [ ] **Step 1: Explore the live app manually**
 
 Open the app in your browser:
+
 ```
 https://dev.slimkit.health/walking/survey/?stripeV64=true
 ```
+
 (Use BASIC auth `dev` / `gPgFCeJ7`.)
 
 In DevTools, identify the landing screen's:
+
 - Main headline element (look for `data-testid`, otherwise pick a stable role/text)
 - Primary CTA button (the "Start" / "Continue" / similar)
 
@@ -1827,6 +1954,7 @@ Capture in your head: which 1–2 keys you'll assert on.
 - [ ] **Step 2: Write deliberately failing test (forced-fail to validate machinery)**
 
 Create `tests/localization/landing.spec.ts`:
+
 ```ts
 import { test, expect } from '../../src/fixtures/i18n.fixture';
 import { LandingPage } from '../../src/pages/LandingPage';
@@ -1847,6 +1975,7 @@ test('landing shows translated headline and CTA', async ({ page, context, i18n, 
 - [ ] **Step 3: Create skeleton LandingPage**
 
 Create `src/pages/LandingPage.ts`:
+
 ```ts
 import { BasePage } from './BasePage';
 
@@ -1858,9 +1987,7 @@ export class LandingPage extends BasePage {
   }
 
   get cta() {
-    return this.page
-      .getByRole('button', { name: /start|begin|continue|next/i })
-      .first();
+    return this.page.getByRole('button', { name: /start|begin|continue|next/i }).first();
   }
 }
 ```
@@ -1869,6 +1996,7 @@ export class LandingPage extends BasePage {
 
 Run: `npx playwright test --project=en__iphone17__chromium tests/localization/landing.spec.ts --headed`
 Expected: test FAILS at the `'THIS_SHOULD_NEVER_MATCH'` assert. **Verify** that:
+
 - The browser actually opened the survey page (you saw the real landing).
 - The headline locator did find an element (the error message names actual text from the page, not "no elements found").
 
@@ -1877,6 +2005,7 @@ If the locator finds nothing, fix the locator before going on. If it finds the w
 - [ ] **Step 5: Replace probe with real assertion**
 
 Based on what you saw in step 1 and the actual rendered text from step 4, edit `tests/localization/landing.spec.ts`:
+
 ```ts
 import { test, expect } from '../../src/fixtures/i18n.fixture';
 import { LandingPage } from '../../src/pages/LandingPage';
@@ -1905,6 +2034,7 @@ Expected: PASS.
 
 Run: `npx playwright test --project=ru__iphone17__chromium tests/localization/landing.spec.ts`
 Expected: PASS. (Locale switched to ru-RU → app should render Russian → assertion uses ru-RU translation.) If it FAILS, two possibilities:
+
 1. The app doesn't actually switch language from browser locale. **STOP** — escalate to user (this would invalidate the whole project premise).
 2. Our key choice was wrong. Refine `i18n.get('intro_text_X')` to a key that's reliably in both en.json and ru.json.
 
@@ -1928,6 +2058,7 @@ git commit -m "feat(test): landing.spec verifies translated headline per locale"
 ## Task 16: Survey-flow detect-and-answer helper + survey-flow.spec.ts
 
 **Files:**
+
 - Create: `src/pages/SurveyPage.ts`
 - Create: `src/pages/PaywallPage.ts`
 - Create: `tests/helpers/survey-flow.ts`
@@ -1944,6 +2075,7 @@ mkdir -p docs/superpowers/notes
 ```
 
 Create `docs/superpowers/notes/survey-flow-discovery.md`:
+
 ```markdown
 # Survey flow discovery notes — 2026-05-26
 
@@ -1951,10 +2083,10 @@ Recorded by walking through https://dev.slimkit.health/walking/survey/?stripeV64
 
 ## Question types observed
 
-- [ ] single-choice (radio cards)  — DOM pattern: ...
-- [ ] multi-choice (checkboxes / cards)  — DOM pattern: ...
-- [ ] slider (range)  — DOM pattern: ...
-- [ ] text/number input  — DOM pattern: ...
+- [ ] single-choice (radio cards) — DOM pattern: ...
+- [ ] multi-choice (checkboxes / cards) — DOM pattern: ...
+- [ ] slider (range) — DOM pattern: ...
+- [ ] text/number input — DOM pattern: ...
 
 ## Step count
 
@@ -1964,6 +2096,7 @@ Recorded by walking through https://dev.slimkit.health/walking/survey/?stripeV64
 ## Paywall indicator
 
 How we recognize "we've reached the paywall":
+
 - URL contains: ...
 - Element appears: ...
 - Stripe iframe loads: ...
@@ -1985,6 +2118,7 @@ git commit -m "docs: survey flow discovery notes (DOM patterns, step count, payw
 - [ ] **Step 3: Implement SurveyPage with question-type detection**
 
 Create `src/pages/SurveyPage.ts` — **adapt selectors below to what you observed in step 1**:
+
 ```ts
 import { BasePage } from './BasePage';
 
@@ -1998,15 +2132,29 @@ export class SurveyPage extends BasePage {
    */
   async detectQuestionType(): Promise<QuestionType> {
     // Order matters — most specific first.
-    if (await this.page.locator('input[type="range"]').first().isVisible().catch(() => false)) {
+    if (
+      await this.page
+        .locator('input[type="range"]')
+        .first()
+        .isVisible()
+        .catch(() => false)
+    ) {
       return 'slider';
     }
-    if (await this.page.locator('input[type="number"], input[type="text"]').first().isVisible().catch(() => false)) {
+    if (
+      await this.page
+        .locator('input[type="number"], input[type="text"]')
+        .first()
+        .isVisible()
+        .catch(() => false)
+    ) {
       return 'input';
     }
     const checkboxes = this.page.locator('input[type="checkbox"], [role="checkbox"]');
     if ((await checkboxes.count()) > 0) return 'multi';
-    const choices = this.page.locator('[role="radio"], [data-testid*="option"], button[data-testid*="answer"]');
+    const choices = this.page.locator(
+      '[role="radio"], [data-testid*="option"], button[data-testid*="answer"]',
+    );
     if ((await choices.count()) > 0) return 'single';
     return 'unknown';
   }
@@ -2019,7 +2167,9 @@ export class SurveyPage extends BasePage {
     const type = await this.detectQuestionType();
     switch (type) {
       case 'single': {
-        const first = this.page.locator('[role="radio"], [data-testid*="option"], button[data-testid*="answer"]').first();
+        const first = this.page
+          .locator('[role="radio"], [data-testid*="option"], button[data-testid*="answer"]')
+          .first();
         await first.click();
         break;
       }
@@ -2051,9 +2201,7 @@ export class SurveyPage extends BasePage {
    * Adjust selector to what you observed.
    */
   async next(): Promise<void> {
-    const nextBtn = this.page
-      .getByRole('button', { name: /next|continue|→|далее/i })
-      .first();
+    const nextBtn = this.page.getByRole('button', { name: /next|continue|→|далее/i }).first();
     await nextBtn.click();
   }
 
@@ -2073,6 +2221,7 @@ export class SurveyPage extends BasePage {
 - [ ] **Step 4: Implement PaywallPage**
 
 Create `src/pages/PaywallPage.ts`:
+
 ```ts
 import { BasePage } from './BasePage';
 
@@ -2084,9 +2233,7 @@ export class PaywallPage extends BasePage {
   }
 
   get priceBlock() {
-    return this.page
-      .locator('[data-testid*="price"], [class*="price"], [data-price]')
-      .first();
+    return this.page.locator('[data-testid*="price"], [class*="price"], [data-price]').first();
   }
 
   get cta() {
@@ -2100,6 +2247,7 @@ export class PaywallPage extends BasePage {
 - [ ] **Step 5: Implement survey-flow helper**
 
 Create `tests/helpers/survey-flow.ts`:
+
 ```ts
 import type { SurveyPage } from '../../src/pages/SurveyPage';
 
@@ -2125,6 +2273,7 @@ export async function completeAllSteps(survey: SurveyPage): Promise<number> {
 - [ ] **Step 6: Write survey-flow test**
 
 Create `tests/localization/survey-flow.spec.ts`:
+
 ```ts
 import { test, expect } from '../../src/fixtures/i18n.fixture';
 import { LandingPage } from '../../src/pages/LandingPage';
@@ -2178,11 +2327,13 @@ git commit -m "feat(test): full survey flow with detect-and-answer + paywall rea
 ## Task 17: paywall.spec.ts — locale-formatted price
 
 **Files:**
+
 - Create: `tests/localization/paywall.spec.ts`
 
 - [ ] **Step 1: Write the test**
 
 Create `tests/localization/paywall.spec.ts`:
+
 ```ts
 import { test, expect } from '../../src/fixtures/i18n.fixture';
 import { LandingPage } from '../../src/pages/LandingPage';
@@ -2238,25 +2389,25 @@ git commit -m "feat(test): paywall locale-formatted price + heading + CTA"
 ## Task 18: no-missing-keys.spec.ts
 
 **Files:**
+
 - Create: `tests/fixtures/i18n/_visible-ascii-whitelist.json`
 - Create: `tests/localization/no-missing-keys.spec.ts`
 
 - [ ] **Step 1: Seed the ASCII whitelist**
 
 Create `tests/fixtures/i18n/_visible-ascii-whitelist.json`:
+
 ```json
 {
   "exact": ["email", "ok", "next", "info", "stripe", "iphone", "android"],
-  "patterns": [
-    "^https?://",
-    "@[a-z]+\\.[a-z]+$"
-  ]
+  "patterns": ["^https?://", "@[a-z]+\\.[a-z]+$"]
 }
 ```
 
 - [ ] **Step 2: Write the test**
 
 Create `tests/localization/no-missing-keys.spec.ts`:
+
 ```ts
 import { test, expect } from '../../src/fixtures/i18n.fixture';
 import { LandingPage } from '../../src/pages/LandingPage';
@@ -2339,12 +2490,15 @@ test('no unresolved i18n keys or placeholders visible on any survey screen', asy
 - [ ] **Step 3: Run on en + ja + ru**
 
 Run:
+
 ```bash
 npx playwright test --project=en__iphone17__chromium tests/localization/no-missing-keys.spec.ts
 npx playwright test --project=ja__iphone17__chromium tests/localization/no-missing-keys.spec.ts
 npx playwright test --project=ru__iphone17__chromium tests/localization/no-missing-keys.spec.ts
 ```
+
 Expected: PASS in all 3. If any leaked key is reported, investigate:
+
 - Is it a real bug (app shows raw key)? → Leave the test failing, report.
 - Is it a legitimate ASCII string in a CJK locale (e.g., a brand name)? → Add to `_visible-ascii-whitelist.json` with a comment.
 - Does the regex false-positive on something? → Tighten the regex.
@@ -2361,11 +2515,13 @@ git commit -m "feat(test): no-missing-keys scan with ASCII whitelist + placehold
 ## Task 19: visual.spec.ts with reduced snapshot scope
 
 **Files:**
+
 - Create: `tests/localization/visual.spec.ts`
 
 - [ ] **Step 1: Write the test with scope skips**
 
 Create `tests/localization/visual.spec.ts`:
+
 ```ts
 import { test, expect } from '../../src/fixtures/i18n.fixture';
 import { LandingPage } from '../../src/pages/LandingPage';
@@ -2425,6 +2581,7 @@ test.describe('visual snapshots', () => {
 
 Run: `npx playwright test tests/localization/visual.spec.ts --update-snapshots`
 Expected:
+
 - 24 landing snapshots (6 EN + 18 non-EN-iphone17)
 - 6 first-survey-step snapshots
 - 24 paywall snapshots
@@ -2447,6 +2604,7 @@ git commit -m "feat(test): pixel snapshots with reduced scope (54 baselines)"
 ## Task 20: ESLint + Prettier configuration
 
 **Files:**
+
 - Create: `.eslintrc.cjs`
 - Create: `.prettierrc.json`
 - Create: `.prettierignore`
@@ -2454,15 +2612,13 @@ git commit -m "feat(test): pixel snapshots with reduced scope (54 baselines)"
 - [ ] **Step 1: Create ESLint config**
 
 Create `.eslintrc.cjs`:
+
 ```cjs
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
   plugins: ['@typescript-eslint'],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-  ],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   rules: {
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
@@ -2480,6 +2636,7 @@ module.exports = {
 - [ ] **Step 2: Create Prettier config**
 
 Create `.prettierrc.json`:
+
 ```json
 {
   "singleQuote": true,
@@ -2492,6 +2649,7 @@ Create `.prettierrc.json`:
 ```
 
 Create `.prettierignore`:
+
 ```
 node_modules
 test-results
@@ -2526,6 +2684,7 @@ git commit -m "chore: ESLint + Prettier config"
 ## Task 21: Verify open spec items (pt variant, UA-smoke, MAX_STEPS calibration)
 
 **Files:**
+
 - Modify: `src/config/locales.ts` (only if pt-BR needed)
 - Modify: `tests/helpers/survey-flow.ts` (calibrate MAX_STEPS)
 - Modify: `README.md` (document UA-smoke result)
@@ -2535,23 +2694,28 @@ This task closes spec acceptance criteria #7, #8, #9.
 - [ ] **Step 1: pt variant resolution**
 
 Run:
+
 ```bash
 npx playwright test --project=pt__iphone17__chromium tests/localization/landing.spec.ts --headed
 ```
 
 Observe in the headed browser what text appears on the landing page. Compare with both:
+
 - `tests/fixtures/i18n/pt.json` for the key you assert on
 - The text the live app actually rendered
 
 If the test passes AND text matches xlsx → `pt-PT` is correct (xlsx column = European Portuguese).
 
 If the test FAILS because app rendered a different translation (e.g., "Bem-vindo" vs "Olá") → likely pt-BR. Change in `src/config/locales.ts`:
+
 ```ts
 { code: 'pt', bcp47: 'pt-BR', timezone: 'America/Sao_Paulo' },
 ```
+
 Remove the `notes` field. Re-run the test.
 
 Document outcome in `README.md`:
+
 ```markdown
 ## Portuguese variant
 
@@ -2561,6 +2725,7 @@ Resolved to: `pt-XX` (date 2026-MM-DD). Source of truth: the live app responded 
 - [ ] **Step 2: MAX_STEPS calibration**
 
 Run several iterations of survey-flow.spec.ts on en with `--headed` to observe step counts:
+
 ```bash
 for i in 1 2 3; do
   npx playwright test --project=en__iphone17__chromium tests/localization/survey-flow.spec.ts --reporter=line
@@ -2568,11 +2733,13 @@ done
 ```
 
 Add console logging to `tests/helpers/survey-flow.ts` temporarily inside `completeAllSteps`:
+
 ```ts
 console.log(`[survey-flow] reached paywall in ${steps} steps`);
 ```
 
 Observe min and max step counts. Set `MAX_STEPS` in the same file to `Math.ceil(maxObserved * 1.5)`. Remove the temporary log. Add a brief comment:
+
 ```ts
 // MAX_STEPS = 30 based on observed max 18 steps × 1.5 safety margin (measured 2026-05-26)
 export const MAX_STEPS = 30;
@@ -2581,6 +2748,7 @@ export const MAX_STEPS = 30;
 - [ ] **Step 3: UA-smoke check**
 
 Run:
+
 ```bash
 # Capture HTML using our UA-stub
 curl -u dev:gPgFCeJ7 \
@@ -2597,6 +2765,7 @@ diff <(grep -v '<!--' /tmp/with-stub-ua.html) <(grep -v '<!--' /tmp/with-real-ua
 ```
 
 If diff is empty (or only trivial differences like CSRF tokens) → server does not branch by UA → document this in README:
+
 ```markdown
 ## UA-smoke result
 
@@ -2622,12 +2791,14 @@ git commit -m "chore: resolve open spec items (pt variant, UA-smoke, MAX_STEPS)"
 ## Task 22: README polish + final acceptance run
 
 **Files:**
+
 - Modify: `README.md`
 
 - [ ] **Step 1: Expand README**
 
 Replace `README.md` with the full version:
-```markdown
+
+````markdown
 # Manyas E2E — Walking Survey Localization Tests
 
 End-to-end localization tests for https://dev.slimkit.health/walking/survey/?stripeV64=true across 10 languages × 3 devices × 2 browser engines.
@@ -2643,20 +2814,21 @@ cp .env.example .env
 npm run i18n:import           # Convert xlsx to JSON fixtures
 npm test                      # Full matrix (~45 min)
 ```
+````
 
 ## Common tasks
 
-| What                                                | Command                                                              |
-|-----------------------------------------------------|----------------------------------------------------------------------|
-| Smoke run (EN only, fast)                           | `npm run test:smoke`                                                 |
-| Single combination                                  | `npx playwright test --project=ru__iphone17__webkit`                 |
-| All RU variants                                     | `npx playwright test --project=/ru__.*/`                             |
-| Open HTML report after a run                        | `npm run test:report`                                                |
-| Update snapshots after intentional UI change        | `npm run test:update-snapshots`                                      |
-| Re-import translations after xlsx changes           | `npm run i18n:import`                                                |
-| Verify xlsx and JSON are in sync                    | `npm run i18n:check`                                                 |
-| Clean reports/results                               | `npm run test:clean`                                                 |
-| Lint / typecheck / format                           | `npm run lint` / `npm run typecheck` / `npm run format`              |
+| What                                         | Command                                                 |
+| -------------------------------------------- | ------------------------------------------------------- |
+| Smoke run (EN only, fast)                    | `npm run test:smoke`                                    |
+| Single combination                           | `npx playwright test --project=ru__iphone17__webkit`    |
+| All RU variants                              | `npx playwright test --project=/ru__.*/`                |
+| Open HTML report after a run                 | `npm run test:report`                                   |
+| Update snapshots after intentional UI change | `npm run test:update-snapshots`                         |
+| Re-import translations after xlsx changes    | `npm run i18n:import`                                   |
+| Verify xlsx and JSON are in sync             | `npm run i18n:check`                                    |
+| Clean reports/results                        | `npm run test:clean`                                    |
+| Lint / typecheck / format                    | `npm run lint` / `npm run typecheck` / `npm run format` |
 
 ## Project matrix
 
@@ -2692,7 +2864,8 @@ See `docs/superpowers/specs/2026-05-26-e2e-localization-design.md` for the full 
 - WebKit ≠ iOS Safari (see above).
 - iPhone 17 viewport/UA values are based on Apple specs / extrapolation, not real-device measurements.
 - Full matrix run is slow (~45 min); use `test:smoke` for fast feedback during development.
-```
+
+````
 
 - [ ] **Step 2: Run final acceptance gate**
 
@@ -2702,17 +2875,20 @@ npm run typecheck
 npm run lint
 npm run i18n:check
 npm run test:smoke
-```
+````
+
 Expected: all green.
 
 - [ ] **Step 3: Spot-check three non-trivial locales**
 
 Run:
+
 ```bash
 npx playwright test --project=de__iphone17__webkit tests/localization/
 npx playwright test --project=ja__iphone17__webkit tests/localization/
 npx playwright test --project=ru__iphone17__webkit tests/localization/
 ```
+
 Expected: all PASS. If any fail, investigate before declaring done.
 
 - [ ] **Step 4: Commit**
@@ -2728,24 +2904,25 @@ Read through `docs/superpowers/specs/2026-05-26-e2e-localization-design.md` sect
 
 The 10 acceptance criteria from spec §12 should now all be satisfied:
 
-| # | Criterion                                          | Where verified |
-|---|----------------------------------------------------|----------------|
-| 1 | Full matrix runs with no setup errors              | Step 2 above   |
-| 2 | Baselines committed and reproducible               | Task 19        |
-| 3 | Tests deterministic locally (3 consecutive runs)   | Run `npm run test:smoke` thrice to verify |
-| 4 | xlsx change breaks tests with clear messages       | Verified in Task 8 (importer tests) |
-| 5 | README enables <10 min onboarding                  | This task      |
-| 6 | lint + typecheck green                              | Step 2 above   |
-| 7 | UA-smoke documented                                | Task 21        |
-| 8 | pt variant resolved                                | Task 21        |
-| 9 | MAX_STEPS calibrated                               | Task 21        |
-| 10| xlsx schema validation works                       | Task 5         |
+| #   | Criterion                                        | Where verified                            |
+| --- | ------------------------------------------------ | ----------------------------------------- |
+| 1   | Full matrix runs with no setup errors            | Step 2 above                              |
+| 2   | Baselines committed and reproducible             | Task 19                                   |
+| 3   | Tests deterministic locally (3 consecutive runs) | Run `npm run test:smoke` thrice to verify |
+| 4   | xlsx change breaks tests with clear messages     | Verified in Task 8 (importer tests)       |
+| 5   | README enables <10 min onboarding                | This task                                 |
+| 6   | lint + typecheck green                           | Step 2 above                              |
+| 7   | UA-smoke documented                              | Task 21                                   |
+| 8   | pt variant resolved                              | Task 21                                   |
+| 9   | MAX_STEPS calibrated                             | Task 21                                   |
+| 10  | xlsx schema validation works                     | Task 5                                    |
 
 ---
 
 ## Plan self-review
 
 **Spec coverage:** every section in the spec maps to one or more tasks:
+
 - §1 Scope → all (project's reason for existence)
 - §2 Stack → Task 1
 - §3 Structure → Tasks 1, 5, 11, 13, 14, 15, 16

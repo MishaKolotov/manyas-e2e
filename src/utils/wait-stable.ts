@@ -13,13 +13,12 @@ export async function waitForVisualStability(page: Page): Promise<void> {
   await page.evaluate(async () => {
     const imgs = Array.from(document.images);
     await Promise.all(
-      imgs.map(
-        (img) =>
-          img.complete && img.naturalHeight !== 0
-            ? Promise.resolve()
-            : new Promise<void>((resolve) => {
-                img.onload = img.onerror = () => resolve();
-              }),
+      imgs.map((img) =>
+        img.complete && img.naturalHeight !== 0
+          ? Promise.resolve()
+          : new Promise<void>((resolve) => {
+              img.onload = img.onerror = () => resolve();
+            }),
       ),
     );
   });

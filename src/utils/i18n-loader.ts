@@ -20,9 +20,7 @@ export function loadTranslations(locale: LocaleCode): Translations {
   if (hit) return hit;
   const file = path.join(FIXTURES_DIR, `${locale}.json`);
   if (!fs.existsSync(file)) {
-    throw new Error(
-      `Translations file missing: ${file}. Run \`npm run i18n:import\`.`,
-    );
+    throw new Error(`Translations file missing: ${file}. Run \`npm run i18n:import\`.`);
   }
   const data = JSON.parse(fs.readFileSync(file, 'utf8')) as Record<string, string>;
   const t: Translations = {

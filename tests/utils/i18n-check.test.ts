@@ -17,7 +17,9 @@ test('i18n:check passes when meta newer than xlsx', () => {
     fs.writeFileSync(s.xlsx, 'x');
     // sleep to ensure different mtimes
     const t = Date.now();
-    while (Date.now() - t < 50) {}
+    while (Date.now() - t < 50) {
+      // busy wait for mtime granularity
+    }
     fs.writeFileSync(s.meta, '{}');
     expect(() => runI18nCheck(s.xlsx, s.meta)).not.toThrow();
   } finally {
@@ -30,7 +32,9 @@ test('i18n:check fails when xlsx newer than meta', () => {
   try {
     fs.writeFileSync(s.meta, '{}');
     const t = Date.now();
-    while (Date.now() - t < 50) {}
+    while (Date.now() - t < 50) {
+      // busy wait for mtime granularity
+    }
     fs.writeFileSync(s.xlsx, 'x');
     expect(() => runI18nCheck(s.xlsx, s.meta)).toThrow(/i18n:import/);
   } finally {

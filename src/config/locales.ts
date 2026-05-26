@@ -1,14 +1,4 @@
-export type LocaleCode =
-  | 'en'
-  | 'fr'
-  | 'it'
-  | 'es'
-  | 'ja'
-  | 'ru'
-  | 'de'
-  | 'pt'
-  | 'zh'
-  | 'ko';
+export type LocaleCode = 'en' | 'fr' | 'it' | 'es' | 'ja' | 'ru' | 'de' | 'pt' | 'zh' | 'ko';
 
 export interface LocaleDescriptor {
   code: LocaleCode;

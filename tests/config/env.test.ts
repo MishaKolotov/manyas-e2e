@@ -26,7 +26,9 @@ test('loadEnv throws when BASIC_AUTH_USER missing', () => {
 
 test('loadEnv error lists every missing var', () => {
   withEnv({ BASIC_AUTH_USER: undefined, BASIC_AUTH_PASS: undefined }, () => {
-    expect(() => loadEnv()).toThrow(/BASIC_AUTH_USER.*BASIC_AUTH_PASS|BASIC_AUTH_PASS.*BASIC_AUTH_USER/);
+    expect(() => loadEnv()).toThrow(
+      /BASIC_AUTH_USER.*BASIC_AUTH_PASS|BASIC_AUTH_PASS.*BASIC_AUTH_USER/,
+    );
   });
 });
 

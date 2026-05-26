@@ -2,9 +2,7 @@ import { expect, type Locator, type Page } from '@playwright/test';
 
 export async function assertNoHorizontalOverflow(page: Page): Promise<void> {
   const overflow = await page.evaluate(
-    () =>
-      document.documentElement.scrollWidth >
-      document.documentElement.clientWidth,
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
   );
   expect(overflow, 'horizontal page scroll detected (long string broke layout?)').toBe(false);
 }

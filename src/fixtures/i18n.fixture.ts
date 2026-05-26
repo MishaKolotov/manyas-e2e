@@ -12,7 +12,7 @@ export const test = base.extend<{
   i18n: Translations;
   projectMeta: ProjectMeta;
 }>({
-  projectMeta: async ({}, use, testInfo) => {
+  projectMeta: async (_fixtures, use, testInfo) => {
     const md = testInfo.project.metadata as ProjectMeta | undefined;
     if (!md?.locale) {
       throw new Error(

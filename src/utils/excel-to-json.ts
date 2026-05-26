@@ -3,9 +3,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import xlsx, { type WorkSheet } from 'xlsx';
 
-const REQUIRED_LOCALE_COLS = [
-  'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko',
-] as const;
+const REQUIRED_LOCALE_COLS = ['en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko'] as const;
 
 export interface ImportResult {
   totalKeys: number;
@@ -20,11 +18,7 @@ export interface ImportResult {
   duplicateKeys: string[];
 }
 
-function validateSheetSchema(
-  sheet: WorkSheet,
-  sheetName: string,
-  requireKeyCol: boolean,
-): void {
+function validateSheetSchema(sheet: WorkSheet, sheetName: string, requireKeyCol: boolean): void {
   const rows = xlsx.utils.sheet_to_json<string[]>(sheet, {
     header: 1,
     defval: '',
@@ -78,7 +72,7 @@ export function classifyRow(
 }
 
 export function normalizeValue(raw: string): string {
-  return String(raw).replace(/ /g, ' ').replace(/⏎/g, '\n').trim();
+  return String(raw).replace(/ /g, ' ').replace(/⏎/g, '\n').trim();
 }
 
 export function slugifyEnglish(text: string): string {
@@ -132,9 +126,16 @@ function readSheet2(
   if (englishIdx === -1) return [];
   // header names → locale codes (Sheet2 uses language names not codes)
   const nameToCode: Record<string, string> = {
-    english: 'en', russian: 'ru', french: 'fr', german: 'de',
-    italian: 'it', portuguese: 'pt', spanish: 'es', chinese: 'zh',
-    japanese: 'ja', korean: 'ko',
+    english: 'en',
+    russian: 'ru',
+    french: 'fr',
+    german: 'de',
+    italian: 'it',
+    portuguese: 'pt',
+    spanish: 'es',
+    chinese: 'zh',
+    japanese: 'ja',
+    korean: 'ko',
   };
   const localeIdx: Record<string, number> = {};
   for (const c of REQUIRED_LOCALE_COLS) {

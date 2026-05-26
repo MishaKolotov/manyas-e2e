@@ -4,7 +4,12 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as xlsx from 'xlsx';
 import { fileURLToPath } from 'url';
-import { importXlsx, classifyRow, normalizeValue, slugifyEnglish } from '../../src/utils/excel-to-json';
+import {
+  importXlsx,
+  classifyRow,
+  normalizeValue,
+  slugifyEnglish,
+} from '../../src/utils/excel-to-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURE = path.join(__dirname, '__importer-test-input.xlsx');
@@ -17,25 +22,17 @@ test('importXlsx throws if xlsx is missing', () => {
 
 test('importXlsx throws if Sheet1 lacks required column', () => {
   const wb = xlsx.utils.book_new();
-  xlsx.utils.book_append_sheet(
-    wb,
-    xlsx.utils.aoa_to_sheet([['key', 'en', 'ru']]),
-    'Sheet1',
-  );
+  xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([['key', 'en', 'ru']]), 'Sheet1');
   xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([[]]), 'Sheet2');
   xlsx.utils.book_append_sheet(
     wb,
-    xlsx.utils.aoa_to_sheet([
-      ['key', 'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko'],
-    ]),
+    xlsx.utils.aoa_to_sheet([['key', 'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko']]),
     'Sheet3',
   );
   const tmpFile = path.join(os.tmpdir(), `bad-${Date.now()}.xlsx`);
   xlsx.writeFile(wb, tmpFile);
   try {
-    expect(() => importXlsx(tmpFile, os.tmpdir())).toThrow(
-      /Sheet1 missing required column: 'fr'/,
-    );
+    expect(() => importXlsx(tmpFile, os.tmpdir())).toThrow(/Sheet1 missing required column: 'fr'/);
   } finally {
     fs.unlinkSync(tmpFile);
   }
@@ -79,15 +76,11 @@ test('classifyRow: cyrillic key with only ru filled → RU_NOTE', () => {
 });
 
 test('classifyRow: normal key → ACCEPT', () => {
-  expect(classifyRow('intro_text_0', { en: 'Walking', ru: 'Ходьба' })).toBe(
-    'ACCEPT',
-  );
+  expect(classifyRow('intro_text_0', { en: 'Walking', ru: 'Ходьба' })).toBe('ACCEPT');
 });
 
 test('classifyRow: camelCase key → ACCEPT', () => {
-  expect(
-    classifyRow('fitnesLevel_title', { en: "What's your level?" }),
-  ).toBe('ACCEPT');
+  expect(classifyRow('fitnesLevel_title', { en: "What's your level?" })).toBe('ACCEPT');
 });
 
 test('normalizeValue: replaces NBSP with regular space', () => {
@@ -147,17 +140,36 @@ test('importXlsx: cross-sheet duplicate — Sheet3 wins, key logged', () => {
   const header = ['key', 'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko'];
   xlsx.utils.book_append_sheet(
     wb,
-    xlsx.utils.aoa_to_sheet([header, ['dup_key', 'A', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']]),
+    xlsx.utils.aoa_to_sheet([
+      header,
+      ['dup_key', 'A', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'],
+    ]),
     'Sheet1',
   );
   xlsx.utils.book_append_sheet(
     wb,
-    xlsx.utils.aoa_to_sheet([['English', 'Russian', 'French', 'German', 'Italian', 'Portuguese', 'Spanish', 'Chinese', 'Japanese', 'Korean']]),
+    xlsx.utils.aoa_to_sheet([
+      [
+        'English',
+        'Russian',
+        'French',
+        'German',
+        'Italian',
+        'Portuguese',
+        'Spanish',
+        'Chinese',
+        'Japanese',
+        'Korean',
+      ],
+    ]),
     'Sheet2',
   );
   xlsx.utils.book_append_sheet(
     wb,
-    xlsx.utils.aoa_to_sheet([header, ['dup_key', 'B', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b']]),
+    xlsx.utils.aoa_to_sheet([
+      header,
+      ['dup_key', 'B', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+    ]),
     'Sheet3',
   );
   const tmp = path.join(os.tmpdir(), `cross-dup-${Date.now()}.xlsx`);
@@ -188,21 +200,28 @@ test('importXlsx: fails loud on within-sheet duplicate', () => {
   );
   xlsx.utils.book_append_sheet(
     wb,
-    xlsx.utils.aoa_to_sheet([['English', 'Russian', 'French', 'German', 'Italian', 'Portuguese', 'Spanish', 'Chinese', 'Japanese', 'Korean']]),
+    xlsx.utils.aoa_to_sheet([
+      [
+        'English',
+        'Russian',
+        'French',
+        'German',
+        'Italian',
+        'Portuguese',
+        'Spanish',
+        'Chinese',
+        'Japanese',
+        'Korean',
+      ],
+    ]),
     'Sheet2',
   );
-  xlsx.utils.book_append_sheet(
-    wb,
-    xlsx.utils.aoa_to_sheet([header]),
-    'Sheet3',
-  );
+  xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([header]), 'Sheet3');
   const tmp = path.join(os.tmpdir(), `within-dup-${Date.now()}.xlsx`);
   xlsx.writeFile(wb, tmp);
   const outDir = fs.mkdtempSync(path.join(os.tmpdir(), 'i18n-within-'));
   try {
-    expect(() => importXlsx(tmp, outDir)).toThrow(
-      /appears more than once within Sheet1/,
-    );
+    expect(() => importXlsx(tmp, outDir)).toThrow(/appears more than once within Sheet1/);
   } finally {
     fs.unlinkSync(tmp);
   }

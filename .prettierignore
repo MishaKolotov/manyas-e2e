@@ -1,0 +1,6 @@
+node_modules
+test-results
+playwright-report
+*-snapshots/
+tests/fixtures/i18n/*.json
+WWLI Onboarding Localisation.xlsx

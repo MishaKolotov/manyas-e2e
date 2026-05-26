@@ -20,9 +20,7 @@ test('project name format is locale__device__engine', () => {
     surveyPath: '/s/',
     featureFlags: 'a=1',
   });
-  expect(projects).toContainEqual(
-    expect.objectContaining({ name: 'ru__iphone17__webkit' }),
-  );
+  expect(projects).toContainEqual(expect.objectContaining({ name: 'ru__iphone17__webkit' }));
 });
 
 test('each project carries metadata with locale, device, engine', () => {
