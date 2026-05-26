@@ -12,7 +12,12 @@ export const test = base.extend<{
   i18n: Translations;
   projectMeta: ProjectMeta;
 }>({
-  projectMeta: async (_fixtures, use, testInfo) => {
+  // Playwright requires the first argument of a fixture to be an object-
+  // destructuring pattern even when no dependencies are pulled. Suppress the
+  // lint complaint here instead of renaming, otherwise Playwright rejects the
+  // fixture at runtime.
+  // eslint-disable-next-line no-empty-pattern
+  projectMeta: async ({}, use, testInfo) => {
     const md = testInfo.project.metadata as ProjectMeta | undefined;
     if (!md?.locale) {
       throw new Error(
