@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as xlsx from 'xlsx';
-import xlsxDefault from 'xlsx';
+import xlsx, { type WorkSheet } from 'xlsx';
 
 const REQUIRED_LOCALE_COLS = [
   'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko',
@@ -21,7 +20,7 @@ export interface ImportResult {
 }
 
 function validateSheetSchema(
-  sheet: xlsx.WorkSheet,
+  sheet: WorkSheet,
   sheetName: string,
   requireKeyCol: boolean,
 ): void {
@@ -55,7 +54,7 @@ export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
       `Place WWLI Onboarding Localisation.xlsx in repo root. Looked for: ${xlsxPath}`,
     );
   }
-  const wb = xlsxDefault.readFile(xlsxPath);
+  const wb = xlsx.readFile(xlsxPath);
   for (const required of ['Sheet1', 'Sheet2', 'Sheet3']) {
     if (!wb.SheetNames.includes(required)) {
       throw new Error(`Workbook missing sheet: ${required}`);
