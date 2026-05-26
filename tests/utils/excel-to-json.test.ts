@@ -49,6 +49,10 @@ test('classifyRow: empty en → EMPTY', () => {
   expect(classifyRow('intro_text_0', { en: '' })).toBe('EMPTY');
 });
 
+test('classifyRow: whitespace-only en → EMPTY', () => {
+  expect(classifyRow('intro_text_0', { en: '   \t  ' })).toBe('EMPTY');
+});
+
 test('classifyRow: !!! marker → MARKER', () => {
   expect(classifyRow('Note!!!', { en: 'x' })).toBe('MARKER');
 });

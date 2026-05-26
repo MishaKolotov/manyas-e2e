@@ -62,6 +62,10 @@ export function classifyRow(
   if (!k) return 'EMPTY';
   if (MARKER_RE.test(k)) return 'MARKER';
   if (EMOJI_RE.test(k)) return 'EMOJI';
+  // Rows whose key is in Cyrillic and where no language column other than `ru`
+  // is filled are internal Russian-language notes left by the localization
+  // team (e.g. "ВАЖНАЯ ИНФОРМАЦИЯ"). They are not translations and must be
+  // skipped before we hit the empty-`en` rule below.
   if (CYRILLIC_RE.test(k)) {
     const nonRuFilled = REQUIRED_LOCALE_COLS.filter(
       (c) => c !== 'ru' && values[c] && String(values[c]).trim() !== '',
