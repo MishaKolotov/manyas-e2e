@@ -176,6 +176,7 @@ export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
   const sheet2Rows = readSheet2(wb.Sheets['Sheet2']);
 
   const skippedRows: ImportResult['skippedRows'] = [];
+  const duplicateKeys: string[] = []; // benign same-value duplicates across sheets
   const accepted: Record<string, Record<string, string>> = {}; // key → locale → value
   const seenIn: Record<string, string> = {}; // key → sheet
 
@@ -197,34 +198,21 @@ export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
         continue;
       }
       if (accepted[r.key] && seenIn[r.key] !== sheetName) {
-        // Duplicate key across sheets: throw only when triggered from the test
-        // fixture (different en values that are clearly distinct strings, not
-        // HTML-vs-plain variants).  In real-xlsx runs the 3 conflicting pairs
-        // are HTML-wrapped vs plain-text versions of the same content — keep
-        // the first-seen (Sheet1, plain text) and record the skip.
-        if (
-          normalizeValue(accepted[r.key].en ?? '') !==
-          normalizeValue(r.values.en ?? '')
-        ) {
-          // For the test fixture the values differ in a way that signals a true
-          // conflict (e.g. 'A' vs 'B').  For the real xlsx the differences are
-          // cosmetic HTML spans — we still keep first-seen but do NOT throw so
-          // that the import can complete.  We detect a "test-fixture-level"
-          // conflict by checking whether the key was produced by the fixture
-          // (no HTML in either value).
-          const firstEn = normalizeValue(accepted[r.key].en ?? '');
-          const secondEn = normalizeValue(r.values.en ?? '');
-          const eitherHasHtml = /<[a-z]/.test(firstEn) || /<[a-z]/.test(secondEn);
-          if (!eitherHasHtml) {
-            throw new Error(
-              `Duplicate key '${r.key}' found in ${seenIn[r.key]} and ${sheetName}. ` +
-                `${seenIn[r.key]} value: '${firstEn}'. ${sheetName} value: '${secondEn}'. ` +
-                `Resolve by removing one in xlsx.`,
-            );
-          }
+        const firstEn = normalizeValue(accepted[r.key].en ?? '');
+        const secondEn = normalizeValue(r.values.en ?? '');
+        if (firstEn === secondEn) {
+          // Same-value duplicate: a translator has copied the row into a second
+          // sheet (or left both lying around). Harmless because both rows
+          // produce identical translations. Record it in _meta for audit and
+          // keep the first-seen entry.
+          duplicateKeys.push(r.key);
+          continue;
         }
-        // same-value dup or HTML-vs-plain variant — skip, keep first occurrence
-        continue;
+        throw new Error(
+          `Duplicate key '${r.key}' found in ${seenIn[r.key]} and ${sheetName}. ` +
+            `${seenIn[r.key]} en: '${firstEn}'. ${sheetName} en: '${secondEn}'. ` +
+            `Resolve by removing one in xlsx.`,
+        );
       }
       accepted[r.key] = {};
       seenIn[r.key] = sheetName;
@@ -254,11 +242,11 @@ export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
     totalKeys: Object.keys(accepted).length,
     perLocale,
     skippedRows,
-    duplicateKeys: [] as string[], // we throw on duplicates; this stays empty in success path
+    duplicateKeys,
   };
   fs.writeFileSync(path.join(outDir, '_meta.json'), JSON.stringify(meta, null, 2) + '\n');
 
-  return { totalKeys: meta.totalKeys, perLocale, skippedRows, duplicateKeys: [] };
+  return { totalKeys: meta.totalKeys, perLocale, skippedRows, duplicateKeys };
 }
 
 // CLI entrypoint (when run directly via tsx)
