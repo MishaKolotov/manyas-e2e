@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as xlsx from 'xlsx';
 import { fileURLToPath } from 'url';
-import { importXlsx, classifyRow } from '../../src/utils/excel-to-json';
+import { importXlsx, classifyRow, normalizeValue, slugifyEnglish } from '../../src/utils/excel-to-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURE = path.join(__dirname, '__importer-test-input.xlsx');
@@ -88,4 +88,28 @@ test('classifyRow: camelCase key → ACCEPT', () => {
   expect(
     classifyRow('fitnesLevel_title', { en: "What's your level?" }),
   ).toBe('ACCEPT');
+});
+
+test('normalizeValue: replaces NBSP with regular space', () => {
+  expect(normalizeValue('Hello World')).toBe('Hello World');
+});
+
+test('normalizeValue: replaces ⏎ glyph with newline', () => {
+  expect(normalizeValue('Line1 ⏎ Line2')).toBe('Line1 \n Line2');
+});
+
+test('normalizeValue: trims edges', () => {
+  expect(normalizeValue('  spaced  ')).toBe('spaced');
+});
+
+test('slugifyEnglish: basic phrase', () => {
+  expect(slugifyEnglish('What do you want?')).toBe('what_do_you_want');
+});
+
+test('slugifyEnglish: collapses repeated underscores', () => {
+  expect(slugifyEnglish('A — B - C')).toBe('a_b_c');
+});
+
+test('slugifyEnglish: handles trailing punctuation', () => {
+  expect(slugifyEnglish('Hello!!!')).toBe('hello');
 });

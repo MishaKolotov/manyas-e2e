@@ -76,6 +76,17 @@ export function classifyRow(
   return 'ACCEPT';
 }
 
+export function normalizeValue(raw: string): string {
+  return String(raw).replace(/ /g, ' ').replace(/⏎/g, '\n').trim();
+}
+
+export function slugifyEnglish(text: string): string {
+  return String(text)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
 export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
   if (!fs.existsSync(xlsxPath)) {
     throw new Error(
