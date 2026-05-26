@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
-import * as xlsx from 'xlsx';
+import xlsx from 'xlsx';
 import { fileURLToPath } from 'url';
 import {
   importXlsx,
@@ -84,10 +84,12 @@ test('classifyRow: camelCase key → ACCEPT', () => {
 });
 
 test('normalizeValue: replaces NBSP with regular space', () => {
+  // NBSP (U+00A0) via escape so Prettier can't silently swap it for a regular space.
   expect(normalizeValue('Hello World')).toBe('Hello World');
 });
 
 test('normalizeValue: replaces ⏎ glyph with newline', () => {
+  // ⏎ is the ⏎ "return" glyph the localization team uses for line breaks.
   expect(normalizeValue('Line1 ⏎ Line2')).toBe('Line1 \n Line2');
 });
 
@@ -131,7 +133,9 @@ test('importXlsx against fixture produces correct JSONs and meta', () => {
   const meta = JSON.parse(fs.readFileSync(path.join(outDir, '_meta.json'), 'utf8'));
   expect(meta.totalKeys).toBe(4);
   expect(meta.skippedRows.length).toBeGreaterThan(0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expect(meta.skippedRows.some((r: any) => r.category === 'MARKER')).toBe(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expect(meta.skippedRows.some((r: any) => r.category === 'EMPTY')).toBe(true);
 });
 

@@ -71,8 +71,16 @@ export function classifyRow(
   return 'ACCEPT';
 }
 
+// Patterns hoisted to module scope with unicode escapes so Prettier / IDE
+// auto-format cannot silently collapse the special characters into a regular
+// space (which would turn the replace into a no-op).
+//   U+00A0 = non-breaking space (NBSP)
+//   U+23CE = return-symbol used by the localization team for line breaks
+const NBSP_RE = /\u00A0/g;
+const RETURN_GLYPH_RE = /\u23CE/g;
+
 export function normalizeValue(raw: string): string {
-  return String(raw).replace(/ /g, ' ').replace(/⏎/g, '\n').trim();
+  return String(raw).replace(NBSP_RE, ' ').replace(RETURN_GLYPH_RE, '\n').trim();
 }
 
 export function slugifyEnglish(text: string): string {
