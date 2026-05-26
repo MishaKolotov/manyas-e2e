@@ -48,6 +48,30 @@ function validateSheetSchema(
   }
 }
 
+export type RowCategory = 'EMPTY' | 'MARKER' | 'EMOJI' | 'RU_NOTE' | 'ACCEPT';
+
+const EMOJI_RE = /\p{Extended_Pictographic}/u;
+const CYRILLIC_RE = /[Ѐ-ӿ]/;
+const MARKER_RE = /[!?]{2,}/;
+
+export function classifyRow(
+  key: string,
+  values: Partial<Record<(typeof REQUIRED_LOCALE_COLS)[number], string>>,
+): RowCategory {
+  const k = String(key).trim();
+  if (!k) return 'EMPTY';
+  if (MARKER_RE.test(k)) return 'MARKER';
+  if (EMOJI_RE.test(k)) return 'EMOJI';
+  if (CYRILLIC_RE.test(k)) {
+    const nonRuFilled = REQUIRED_LOCALE_COLS.filter(
+      (c) => c !== 'ru' && values[c] && String(values[c]).trim() !== '',
+    );
+    if (nonRuFilled.length === 0) return 'RU_NOTE';
+  }
+  if (!values.en || !String(values.en).trim()) return 'EMPTY';
+  return 'ACCEPT';
+}
+
 export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
   if (!fs.existsSync(xlsxPath)) {
     throw new Error(
