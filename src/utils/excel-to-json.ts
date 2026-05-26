@@ -176,15 +176,20 @@ export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
   const sheet2Rows = readSheet2(wb.Sheets['Sheet2']);
 
   const skippedRows: ImportResult['skippedRows'] = [];
-  const duplicateKeys: string[] = []; // benign same-value duplicates across sheets
+  const duplicateKeys: string[] = []; // any cross-sheet duplicate, same- or diff-value
   const accepted: Record<string, Record<string, string>> = {}; // key → locale → value
   const seenIn: Record<string, string> = {}; // key → sheet
 
+  // Iteration order matters: Sheet3 is the newer revision of the table and
+  // wins on cross-sheet conflicts (verified empirically — the live app uses
+  // Sheet3's text for the three keys that disagree with Sheet1). Sheet2 has
+  // its own keyspace (sheet2.*), so order vs the others doesn't matter.
   for (const [sheetName, rows] of [
-    ['Sheet1', sheet1Rows] as const,
     ['Sheet3', sheet3Rows] as const,
+    ['Sheet1', sheet1Rows] as const,
     ['Sheet2', sheet2Rows] as const,
   ]) {
+    const seenInThisSheet = new Map<string, string>(); // key → normalized en
     for (const r of rows) {
       const cat = classifyRow(r.key, r.values);
       if (cat !== 'ACCEPT') {
@@ -197,22 +202,31 @@ export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
         });
         continue;
       }
-      if (accepted[r.key] && seenIn[r.key] !== sheetName) {
-        const firstEn = normalizeValue(accepted[r.key].en ?? '');
-        const secondEn = normalizeValue(r.values.en ?? '');
-        if (firstEn === secondEn) {
-          // Same-value duplicate: a translator has copied the row into a second
-          // sheet (or left both lying around). Harmless because both rows
-          // produce identical translations. Record it in _meta for audit and
-          // keep the first-seen entry.
+      const thisEn = normalizeValue(r.values.en ?? '');
+      const earlierEn = seenInThisSheet.get(r.key);
+      if (earlierEn !== undefined) {
+        if (earlierEn === thisEn) {
+          // Same-value within-sheet duplicate: benign copy-paste (Sheet2 has
+          // five of these). Log it and keep the first row.
           duplicateKeys.push(r.key);
           continue;
         }
+        // Different-value within-sheet duplicate is a real authoring bug —
+        // one key cannot map to two distinct translations. Fail loud.
         throw new Error(
-          `Duplicate key '${r.key}' found in ${seenIn[r.key]} and ${sheetName}. ` +
-            `${seenIn[r.key]} en: '${firstEn}'. ${sheetName} en: '${secondEn}'. ` +
-            `Resolve by removing one in xlsx.`,
+          `Duplicate key '${r.key}' appears more than once within ${sheetName} ` +
+            `with conflicting en values ('${earlierEn}' vs '${thisEn}'). ` +
+            `Resolve by removing one row in xlsx.`,
         );
+      }
+      seenInThisSheet.set(r.key, thisEn);
+
+      if (accepted[r.key] && seenIn[r.key] !== sheetName) {
+        // Cross-sheet duplicate. The earlier-iterated sheet wins (per the
+        // order above, Sheet3 wins over Sheet1). Just log it; same-value and
+        // different-value cross-sheet dups are both treated as benign.
+        duplicateKeys.push(r.key);
+        continue;
       }
       accepted[r.key] = {};
       seenIn[r.key] = sheetName;

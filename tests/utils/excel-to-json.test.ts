@@ -142,7 +142,7 @@ test('importXlsx against fixture produces correct JSONs and meta', () => {
   expect(meta.skippedRows.some((r: any) => r.category === 'EMPTY')).toBe(true);
 });
 
-test('importXlsx fails loud on duplicate keys', () => {
+test('importXlsx: cross-sheet duplicate — Sheet3 wins, key logged', () => {
   const wb = xlsx.utils.book_new();
   const header = ['key', 'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko'];
   xlsx.utils.book_append_sheet(
@@ -150,17 +150,59 @@ test('importXlsx fails loud on duplicate keys', () => {
     xlsx.utils.aoa_to_sheet([header, ['dup_key', 'A', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']]),
     'Sheet1',
   );
-  xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([['English', 'Russian', 'French', 'German', 'Italian', 'Portuguese', 'Spanish', 'Chinese', 'Japanese', 'Korean']]), 'Sheet2');
+  xlsx.utils.book_append_sheet(
+    wb,
+    xlsx.utils.aoa_to_sheet([['English', 'Russian', 'French', 'German', 'Italian', 'Portuguese', 'Spanish', 'Chinese', 'Japanese', 'Korean']]),
+    'Sheet2',
+  );
   xlsx.utils.book_append_sheet(
     wb,
     xlsx.utils.aoa_to_sheet([header, ['dup_key', 'B', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b']]),
     'Sheet3',
   );
-  const tmp = path.join(os.tmpdir(), `dup-${Date.now()}.xlsx`);
+  const tmp = path.join(os.tmpdir(), `cross-dup-${Date.now()}.xlsx`);
   xlsx.writeFile(wb, tmp);
-  const outDir = fs.mkdtempSync(path.join(os.tmpdir(), 'i18n-dup-'));
+  const outDir = fs.mkdtempSync(path.join(os.tmpdir(), 'i18n-cross-'));
   try {
-    expect(() => importXlsx(tmp, outDir)).toThrow(/duplicate key.*dup_key/i);
+    const result = importXlsx(tmp, outDir);
+    // Sheet3 is iterated first → its 'B' wins, Sheet1's 'A' is logged as a dup.
+    const en = JSON.parse(fs.readFileSync(path.join(outDir, 'en.json'), 'utf8'));
+    expect(en.dup_key).toBe('B');
+    expect(result.duplicateKeys).toContain('dup_key');
+  } finally {
+    fs.unlinkSync(tmp);
+  }
+});
+
+test('importXlsx: fails loud on within-sheet duplicate', () => {
+  const wb = xlsx.utils.book_new();
+  const header = ['key', 'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko'];
+  xlsx.utils.book_append_sheet(
+    wb,
+    xlsx.utils.aoa_to_sheet([
+      header,
+      ['dup_within', 'A', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'],
+      ['dup_within', 'B', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+    ]),
+    'Sheet1',
+  );
+  xlsx.utils.book_append_sheet(
+    wb,
+    xlsx.utils.aoa_to_sheet([['English', 'Russian', 'French', 'German', 'Italian', 'Portuguese', 'Spanish', 'Chinese', 'Japanese', 'Korean']]),
+    'Sheet2',
+  );
+  xlsx.utils.book_append_sheet(
+    wb,
+    xlsx.utils.aoa_to_sheet([header]),
+    'Sheet3',
+  );
+  const tmp = path.join(os.tmpdir(), `within-dup-${Date.now()}.xlsx`);
+  xlsx.writeFile(wb, tmp);
+  const outDir = fs.mkdtempSync(path.join(os.tmpdir(), 'i18n-within-'));
+  try {
+    expect(() => importXlsx(tmp, outDir)).toThrow(
+      /appears more than once within Sheet1/,
+    );
   } finally {
     fs.unlinkSync(tmp);
   }
