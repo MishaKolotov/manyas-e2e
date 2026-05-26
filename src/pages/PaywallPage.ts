@@ -24,9 +24,14 @@ export class PaywallPage extends BasePage {
   }
 
   get cta() {
+    // Paywall CTA text varies a lot across A/B variants ("Get my plan",
+    // "Continue", "Start my plan", "Subscribe", "Pay", localized forms).
+    // Restrict to #root and use a permissive regex.
     return this.page
-      .getByRole('button', { name: /pay|subscribe|start|continue|get plan|оплатить|купить/i })
-      .filter({ visible: true })
+      .locator('#root button:visible', {
+        hasText:
+          /(pay|subscribe|start|continue|get (my )?plan|join|оплатит|купит|подписат|начат|продолжит)/i,
+      })
       .first();
   }
 
