@@ -1,0 +1,39 @@
+{
+  "name": "manyas-e2e",
+  "version": "0.1.0",
+  "private": true,
+  "description": "E2E localization tests for slimkit.health walking survey",
+  "type": "module",
+  "scripts": {
+    "pretest": "npm run i18n:check",
+    "test": "playwright test",
+    "test:smoke": "playwright test --project=/en__.*/",
+    "test:headed": "playwright test --headed",
+    "test:debug": "PWDEBUG=1 playwright test",
+    "test:ui": "playwright test --ui",
+    "test:update-snapshots": "playwright test --update-snapshots",
+    "test:report": "playwright show-report",
+    "test:clean": "rimraf test-results playwright-report",
+    "i18n:import": "tsx src/utils/excel-to-json.ts",
+    "i18n:check": "tsx src/utils/i18n-check.ts",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "typecheck": "tsc --noEmit",
+    "install:browsers": "playwright install --with-deps chromium webkit"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@typescript-eslint/eslint-plugin": "^8.60.0",
+    "@typescript-eslint/parser": "^8.60.0",
+    "dotenv": "^17.4.2",
+    "eslint": "^10.4.0",
+    "prettier": "^3.8.3",
+    "rimraf": "^6.1.3",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "xlsx": "^0.18.5"
+  }
+}
