@@ -57,11 +57,15 @@ export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
   const wb = xlsx.readFile(xlsxPath);
   for (const required of ['Sheet1', 'Sheet2', 'Sheet3']) {
     if (!wb.SheetNames.includes(required)) {
-      throw new Error(`Workbook missing sheet: ${required}`);
+      throw new Error(`Workbook at ${xlsxPath} missing sheet: ${required}`);
     }
   }
   validateSheetSchema(wb.Sheets['Sheet1'], 'Sheet1', true);
   validateSheetSchema(wb.Sheets['Sheet3'], 'Sheet3', true);
+  // Sheet2 has a different header shape (full language names like "English",
+  // "Russian" instead of locale codes) and no 'key' column, so it cannot use
+  // the same validator. Task 6 will add a Sheet2-specific reader that handles
+  // the schema differences inline.
 
   // TODO Task 6+: row processing, normalization, output
 

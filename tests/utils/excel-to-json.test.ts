@@ -23,12 +23,18 @@ test('importXlsx throws if Sheet1 lacks required column', () => {
     'Sheet1',
   );
   xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([[]]), 'Sheet2');
-  xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([[]]), 'Sheet3');
+  xlsx.utils.book_append_sheet(
+    wb,
+    xlsx.utils.aoa_to_sheet([
+      ['key', 'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko'],
+    ]),
+    'Sheet3',
+  );
   const tmpFile = path.join(os.tmpdir(), `bad-${Date.now()}.xlsx`);
   xlsx.writeFile(wb, tmpFile);
   try {
     expect(() => importXlsx(tmpFile, os.tmpdir())).toThrow(
-      /missing required column/i,
+      /Sheet1 missing required column: 'fr'/,
     );
   } finally {
     fs.unlinkSync(tmpFile);

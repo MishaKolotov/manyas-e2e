@@ -1,4 +1,4 @@
-import * as xlsx from 'xlsx';
+import xlsx from 'xlsx';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 
