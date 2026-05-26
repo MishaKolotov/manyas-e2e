@@ -1,0 +1,1094 @@
+{
+  "importedAt": "2026-05-26T11:37:28.721Z",
+  "source": "WWLI Onboarding Localisation.xlsx",
+  "totalKeys": 1328,
+  "perLocale": {
+    "en": {
+      "translated": 1328,
+      "missingKeys": []
+    },
+    "fr": {
+      "translated": 1303,
+      "missingKeys": [
+        "without_app_16",
+        "without_app_17",
+        "without_app_18",
+        "without_app_19",
+        "without_app_20",
+        "InfoGraphic_1",
+        "InfoGraphic_2",
+        "InfoGraphic_3",
+        "InfoGraphic_4",
+        "InfoGraphic_5",
+        "InfoGraphic_6",
+        "InfoGraphic_7",
+        "InfoGraphic_8",
+        "InfoGraphic_9",
+        "InfoGraphic_10",
+        "InfoGraphic_11",
+        "InfoGraphic_12",
+        "InfoGraphic_13",
+        "InfoGraphic_14",
+        "InfoGraphic_15",
+        "InfoGraphic_16",
+        "InfoGraphic_17",
+        "global \ninstruction",
+        "social_proof_title_female",
+        "social_proof_title_male"
+      ]
+    },
+    "it": {
+      "translated": 1303,
+      "missingKeys": [
+        "without_app_16",
+        "without_app_17",
+        "without_app_18",
+        "without_app_19",
+        "without_app_20",
+        "InfoGraphic_1",
+        "InfoGraphic_2",
+        "InfoGraphic_3",
+        "InfoGraphic_4",
+        "InfoGraphic_5",
+        "InfoGraphic_6",
+        "InfoGraphic_7",
+        "InfoGraphic_8",
+        "InfoGraphic_9",
+        "InfoGraphic_10",
+        "InfoGraphic_11",
+        "InfoGraphic_12",
+        "InfoGraphic_13",
+        "InfoGraphic_14",
+        "InfoGraphic_15",
+        "InfoGraphic_16",
+        "InfoGraphic_17",
+        "global \ninstruction",
+        "social_proof_title_female",
+        "social_proof_title_male"
+      ]
+    },
+    "es": {
+      "translated": 1303,
+      "missingKeys": [
+        "without_app_16",
+        "without_app_17",
+        "without_app_18",
+        "without_app_19",
+        "without_app_20",
+        "InfoGraphic_1",
+        "InfoGraphic_2",
+        "InfoGraphic_3",
+        "InfoGraphic_4",
+        "InfoGraphic_5",
+        "InfoGraphic_6",
+        "InfoGraphic_7",
+        "InfoGraphic_8",
+        "InfoGraphic_9",
+        "InfoGraphic_10",
+        "InfoGraphic_11",
+        "InfoGraphic_12",
+        "InfoGraphic_13",
+        "InfoGraphic_14",
+        "InfoGraphic_15",
+        "InfoGraphic_16",
+        "InfoGraphic_17",
+        "global \ninstruction",
+        "social_proof_title_female",
+        "social_proof_title_male"
+      ]
+    },
+    "ja": {
+      "translated": 1302,
+      "missingKeys": [
+        "without_app_16",
+        "without_app_17",
+        "without_app_18",
+        "without_app_19",
+        "without_app_20",
+        "InfoGraphic_1",
+        "InfoGraphic_2",
+        "InfoGraphic_3",
+        "InfoGraphic_4",
+        "InfoGraphic_5",
+        "InfoGraphic_6",
+        "InfoGraphic_7",
+        "InfoGraphic_8",
+        "InfoGraphic_9",
+        "InfoGraphic_10",
+        "InfoGraphic_11",
+        "InfoGraphic_12",
+        "InfoGraphic_13",
+        "InfoGraphic_14",
+        "InfoGraphic_15",
+        "InfoGraphic_16",
+        "InfoGraphic_17",
+        "payment_text_97",
+        "global \ninstruction",
+        "social_proof_title_female",
+        "social_proof_title_male"
+      ]
+    },
+    "ru": {
+      "translated": 1325,
+      "missingKeys": [
+        "global \ninstruction",
+        "social_proof_title_female",
+        "social_proof_title_male"
+      ]
+    },
+    "de": {
+      "translated": 1303,
+      "missingKeys": [
+        "without_app_16",
+        "without_app_17",
+        "without_app_18",
+        "without_app_19",
+        "without_app_20",
+        "InfoGraphic_1",
+        "InfoGraphic_2",
+        "InfoGraphic_3",
+        "InfoGraphic_4",
+        "InfoGraphic_5",
+        "InfoGraphic_6",
+        "InfoGraphic_7",
+        "InfoGraphic_8",
+        "InfoGraphic_9",
+        "InfoGraphic_10",
+        "InfoGraphic_11",
+        "InfoGraphic_12",
+        "InfoGraphic_13",
+        "InfoGraphic_14",
+        "InfoGraphic_15",
+        "InfoGraphic_16",
+        "InfoGraphic_17",
+        "global \ninstruction",
+        "social_proof_title_female",
+        "social_proof_title_male"
+      ]
+    },
+    "pt": {
+      "translated": 1303,
+      "missingKeys": [
+        "without_app_16",
+        "without_app_17",
+        "without_app_18",
+        "without_app_19",
+        "without_app_20",
+        "InfoGraphic_1",
+        "InfoGraphic_2",
+        "InfoGraphic_3",
+        "InfoGraphic_4",
+        "InfoGraphic_5",
+        "InfoGraphic_6",
+        "InfoGraphic_7",
+        "InfoGraphic_8",
+        "InfoGraphic_9",
+        "InfoGraphic_10",
+        "InfoGraphic_11",
+        "InfoGraphic_12",
+        "InfoGraphic_13",
+        "InfoGraphic_14",
+        "InfoGraphic_15",
+        "InfoGraphic_16",
+        "InfoGraphic_17",
+        "global \ninstruction",
+        "social_proof_title_female",
+        "social_proof_title_male"
+      ]
+    },
+    "zh": {
+      "translated": 1303,
+      "missingKeys": [
+        "without_app_16",
+        "without_app_17",
+        "without_app_18",
+        "without_app_19",
+        "without_app_20",
+        "InfoGraphic_1",
+        "InfoGraphic_2",
+        "InfoGraphic_3",
+        "InfoGraphic_4",
+        "InfoGraphic_5",
+        "InfoGraphic_6",
+        "InfoGraphic_7",
+        "InfoGraphic_8",
+        "InfoGraphic_9",
+        "InfoGraphic_10",
+        "InfoGraphic_11",
+        "InfoGraphic_12",
+        "InfoGraphic_13",
+        "InfoGraphic_14",
+        "InfoGraphic_15",
+        "InfoGraphic_16",
+        "InfoGraphic_17",
+        "global \ninstruction",
+        "social_proof_title_female",
+        "social_proof_title_male"
+      ]
+    },
+    "ko": {
+      "translated": 1302,
+      "missingKeys": [
+        "without_app_16",
+        "without_app_17",
+        "without_app_18",
+        "without_app_19",
+        "without_app_20",
+        "InfoGraphic_1",
+        "InfoGraphic_2",
+        "InfoGraphic_3",
+        "InfoGraphic_4",
+        "InfoGraphic_5",
+        "InfoGraphic_6",
+        "InfoGraphic_7",
+        "InfoGraphic_8",
+        "InfoGraphic_9",
+        "InfoGraphic_10",
+        "InfoGraphic_11",
+        "InfoGraphic_12",
+        "InfoGraphic_13",
+        "InfoGraphic_14",
+        "InfoGraphic_15",
+        "InfoGraphic_16",
+        "InfoGraphic_17",
+        "payment_text_82",
+        "global \ninstruction",
+        "social_proof_title_female",
+        "social_proof_title_male"
+      ]
+    }
+  },
+  "skippedRows": [
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 1,
+      "key": "ВАЖНАЯ ИНФОРМАЦИЯ !!!!",
+      "category": "MARKER",
+      "sampleValues": {
+        "en": "актуальная таблица находится по этой ссылке:\nhttps://docs.google.com/spreadsheets/d/1Rzp4iq6qcAh7untkPPXRMYjZOvbRLF0tuwoyzPBZsuo/edit?gid=0#gid=0",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 2,
+      "key": "Intro",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 13,
+      "key": "",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "How long does it<br/>take to lose 45 lbs<br/>with Walking?",
+        "ru": "За сколько можно<br/>похудеть на 20 кг<br/>с помощью ходьбы?"
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 43,
+      "key": "Walking Level",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 51,
+      "key": "Walking Level 2",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 58,
+      "key": "",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 59,
+      "key": "Work Hard",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 65,
+      "key": "Work Time",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 71,
+      "key": "Typical Day",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 77,
+      "key": "Diet Type",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 84,
+      "key": "Without App Page",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 105,
+      "key": "Sleep Duration",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 110,
+      "key": "Water Intake",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 116,
+      "key": "Active Job",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 121,
+      "key": "Gender",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 125,
+      "key": "Visible Result",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 131,
+      "key": "Age",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 137,
+      "key": "AgeV2",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 144,
+      "key": "Body Type",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 156,
+      "key": "Height And Weight",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 165,
+      "key": "Important Event",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 176,
+      "key": "Important Event Date",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 182,
+      "key": "Main Plan",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 192,
+      "key": "Lifestyle",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 197,
+      "key": "Helps",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 205,
+      "key": "Ideal Weight",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 211,
+      "key": "Relate To",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 220,
+      "key": "Achieved Progress",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 222,
+      "key": "Main Plan Review",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 228,
+      "key": "Ailments",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 234,
+      "key": "Medications",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 241,
+      "key": "Plan Progress",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 247,
+      "key": "Goals Plan",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 251,
+      "key": "Workouts",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 255,
+      "key": "Success Story",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 269,
+      "key": "Success Story Result",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 274,
+      "key": "",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 275,
+      "key": "Email",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 285,
+      "key": "stayOnTrack",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 292,
+      "key": "Newsletter",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 296,
+      "key": "InfoGraphic",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 314,
+      "key": "appInfo",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 317,
+      "key": "wellnessProfile",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 335,
+      "key": "firstScreenV30",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 338,
+      "key": "allergyType",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 345,
+      "key": "firstScreenV56",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 351,
+      "key": "focusNow",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 358,
+      "key": "bellyType",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 365,
+      "key": "struggleWith",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 371,
+      "key": "usuallySleep",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 377,
+      "key": "info5minDay",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 382,
+      "key": "currentPriorities",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 387,
+      "key": "infoDifferentPerson",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 392,
+      "key": "infoTripleWeightLoss",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 398,
+      "key": "alcoholicBeverages",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 402,
+      "key": "infoAlmostDone",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 407,
+      "key": "biggestDrive",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 414,
+      "key": "sixPack",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 421,
+      "key": "statementWorkingOut",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 426,
+      "key": "infoAttractiveBody",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 430,
+      "key": "FrustratedAboutClothes",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 434,
+      "key": "unsettling",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 439,
+      "key": "feelDuringJourney",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 447,
+      "key": "withWalking",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 455,
+      "key": "happyWeight",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 463,
+      "key": "wantToExplore",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 473,
+      "key": "boostingStamina",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 479,
+      "key": "infoVitalityLevel",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 483,
+      "key": "weightLossPrograms",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 491,
+      "key": "uncertain",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 502,
+      "key": "infoWeigthLossEfforts",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 507,
+      "key": "howQuicklyLossWeight",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 513,
+      "key": "infoGreatJob",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 517,
+      "key": "Input Info Validation",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 534,
+      "key": "Payment",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 777,
+      "key": "PDF_screen",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 805,
+      "key": "Buttons",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 815,
+      "key": "Errors",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 845,
+      "key": "Months",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 870,
+      "key": "Static images",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 891,
+      "key": "config V2",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet1",
+      "rowIndex": 1009,
+      "key": "ВАЖНАЯ ИНФОРМАЦИЯ !!!!",
+      "category": "MARKER",
+      "sampleValues": {
+        "en": "актуальная таблица находится по этой ссылке:\nhttps://docs.google.com/spreadsheets/d/1Rzp4iq6qcAh7untkPPXRMYjZOvbRLF0tuwoyzPBZsuo/edit?gid=0#gid=0",
+        "ru": ""
+      }
+    },
+    {
+      "sheet": "Sheet3",
+      "rowIndex": 459,
+      "key": "",
+      "category": "EMPTY",
+      "sampleValues": {
+        "en": "Numbers are according the App Store",
+        "ru": ""
+      }
+    }
+  ],
+  "duplicateKeys": []
+}

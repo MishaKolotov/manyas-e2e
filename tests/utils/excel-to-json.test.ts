@@ -113,3 +113,55 @@ test('slugifyEnglish: collapses repeated underscores', () => {
 test('slugifyEnglish: handles trailing punctuation', () => {
   expect(slugifyEnglish('Hello!!!')).toBe('hello');
 });
+
+test('importXlsx against fixture produces correct JSONs and meta', () => {
+  const outDir = fs.mkdtempSync(path.join(os.tmpdir(), 'i18n-out-'));
+  const result = importXlsx(FIXTURE, outDir);
+
+  // Expected from fixture:
+  // - intro_text_0, intro_text_1, paywall_title — accepted from Sheet1/Sheet3
+  // - sheet2.what_do_you_want — from Sheet2
+  // - "ВАЖНАЯ ИНФОРМАЦИЯ !!!!" — skipped MARKER
+  // - "" + "orphan en value" — skipped EMPTY
+  expect(result.totalKeys).toBe(4);
+
+  const enPath = path.join(outDir, 'en.json');
+  const en = JSON.parse(fs.readFileSync(enPath, 'utf8'));
+  expect(en.intro_text_0).toBe('Walking');
+  expect(en.intro_text_1).toBe('Lose weight');
+  expect(en.paywall_title).toBe('Get started');
+  expect(en['sheet2.what_do_you_want']).toBe('What do you want?');
+
+  const ru = JSON.parse(fs.readFileSync(path.join(outDir, 'ru.json'), 'utf8'));
+  expect(ru.intro_text_0).toBe('Ходьба');
+
+  const meta = JSON.parse(fs.readFileSync(path.join(outDir, '_meta.json'), 'utf8'));
+  expect(meta.totalKeys).toBe(4);
+  expect(meta.skippedRows.length).toBeGreaterThan(0);
+  expect(meta.skippedRows.some((r: any) => r.category === 'MARKER')).toBe(true);
+  expect(meta.skippedRows.some((r: any) => r.category === 'EMPTY')).toBe(true);
+});
+
+test('importXlsx fails loud on duplicate keys', () => {
+  const wb = xlsx.utils.book_new();
+  const header = ['key', 'en', 'fr', 'it', 'es', 'ja', 'ru', 'de', 'pt', 'zh', 'ko'];
+  xlsx.utils.book_append_sheet(
+    wb,
+    xlsx.utils.aoa_to_sheet([header, ['dup_key', 'A', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']]),
+    'Sheet1',
+  );
+  xlsx.utils.book_append_sheet(wb, xlsx.utils.aoa_to_sheet([['English', 'Russian', 'French', 'German', 'Italian', 'Portuguese', 'Spanish', 'Chinese', 'Japanese', 'Korean']]), 'Sheet2');
+  xlsx.utils.book_append_sheet(
+    wb,
+    xlsx.utils.aoa_to_sheet([header, ['dup_key', 'B', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b']]),
+    'Sheet3',
+  );
+  const tmp = path.join(os.tmpdir(), `dup-${Date.now()}.xlsx`);
+  xlsx.writeFile(wb, tmp);
+  const outDir = fs.mkdtempSync(path.join(os.tmpdir(), 'i18n-dup-'));
+  try {
+    expect(() => importXlsx(tmp, outDir)).toThrow(/duplicate key.*dup_key/i);
+  } finally {
+    fs.unlinkSync(tmp);
+  }
+});
