@@ -3,6 +3,86 @@ import { BasePage } from './BasePage';
 export type QuestionType = 'choice' | 'likert' | 'slider' | 'number' | 'text' | 'info';
 
 /**
+ * Localized "advance" button labels across the 10 supported locales,
+ * extracted from the xlsx translations of Continue / Next / Done / Got it
+ * plus the English newsletter opt-in ("Sure, I'm in!"). Anchored at the
+ * start so it doesn't match longer sentences that merely contain the word.
+ */
+const CONTINUE_LABELS = [
+  // en
+  'continue',
+  'next',
+  'done',
+  'got it',
+  "let's go",
+  'lets go',
+  "let's start",
+  'get started',
+  'submit',
+  'go',
+  'sure',
+  // ru
+  'далее',
+  'продолжить',
+  'готово',
+  'понял',
+  'хорошо',
+  'ок',
+  // de
+  'weiter',
+  'fortsetzen',
+  'fertig',
+  'verstanden',
+  'alles klar',
+  // fr
+  'continuer',
+  'suivant',
+  'fait',
+  "j'ai compris",
+  // es
+  'continuar',
+  'siguiente',
+  'listo',
+  'entendido',
+  'entiendo',
+  'lo tengo',
+  // it
+  'continua',
+  'avanti',
+  'fatto',
+  'capito',
+  'va bene',
+  // pt
+  'próximo',
+  'proximo',
+  'pronto',
+  'entendi',
+  'percebi',
+  // ja
+  '続ける',
+  '次へ',
+  '完了',
+  '了解',
+  'わかりました',
+  // zh
+  '继续',
+  '下一步',
+  '完成',
+  '了解',
+  '明白',
+  // ko
+  '계속',
+  '다음',
+  '완료',
+  '알겠습니다',
+];
+
+const CONTINUE_LABEL_RE = new RegExp(
+  '^\\s*(' + CONTINUE_LABELS.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')',
+  'i',
+);
+
+/**
  * SurveyPage encapsulates the in-funnel steps that come after the splash
  * and before the paywall. Each step is one of:
  * - choice: option buttons carrying `[data-value]` (single- or multi-choice)
@@ -65,16 +145,13 @@ export class SurveyPage extends BasePage {
   }
 
   get continueButton() {
-    // Primary advance button inside the React root. The live bundle uses a
-    // handful of short imperatives across screens: continue / next / done /
-    // got it / let's go / get started / submit / go / sure (newsletter
-    // opt-in: "Sure, I'm in!").
-    return this.page
-      .locator('#root button', {
-        hasText:
-          /^(continue|next|done|got it|let.?s (go|start)|get started|submit|go|sure\b)/i,
-      })
-      .first();
+    // Primary advance button inside the React root. The label is localized,
+    // so this regex unions the continue/next/done/got-it forms across all 10
+    // supported locales (extracted from the xlsx fixtures). Without the
+    // localized words the funnel got stuck on choice screens whose only
+    // advance control is a bottom "Continue"-equivalent button (e.g. RU
+    // "Далее", DE "Weiter", JA "次へ").
+    return this.page.locator('#root button', { hasText: CONTINUE_LABEL_RE }).first();
   }
 
   /**
@@ -129,49 +206,7 @@ export class SurveyPage extends BasePage {
         break;
       }
       case 'text': {
-        // Several "text" inputs are inputmode="numeric" wearing a text
-        // disguise — height (ft/in or cm), weight (lb/kg), age, goal weight.
-        // Pick a realistic value per unit so the form's validators don't
-        // block the Continue/Done button. Goal weight specifically must be
-        // *less* than current weight to clear that screen's validator.
-        const all = await this.rootScope
-          .locator(
-            'input[type="text"]:visible, input[type="email"]:visible, input:not([type]):visible',
-          )
-          .all();
-        const heading = (await this.rootScope.locator('h1, h2').first().textContent()) ?? '';
-        const isHeight = /height/i.test(heading);
-        const isGoalWeight = /goal\s*weight|target\s*weight/i.test(heading);
-        const isWeight = /weight/i.test(heading) && !isGoalWeight;
-        const isAge = /\bage\b/i.test(heading);
-        const isEmail = /email|personalized|weight loss plan/i.test(heading);
-
-        for (let i = 0; i < all.length; i++) {
-          const input = all[i];
-          const type = (await input.getAttribute('type')) ?? '';
-          const aria = (await input.getAttribute('aria-label')) ?? '';
-          const placeholder = (await input.getAttribute('placeholder')) ?? '';
-          const hint = `${type} ${aria} ${placeholder}`.toLowerCase();
-          let value = 'Test';
-          if (type === 'email' || /email/i.test(hint) || isEmail) {
-            value = 'manyas-e2e@example.test';
-          } else if (isHeight) {
-            // ft → 5, in → 8, cm → 170
-            if (/cm/i.test(hint)) value = '170';
-            else if (/in/i.test(hint)) value = '8';
-            else value = '5';
-          } else if (isGoalWeight) {
-            // Stay below the current-weight value we used (150 lb / 70 kg).
-            value = /kg/i.test(hint) ? '65' : '140';
-          } else if (isWeight) {
-            value = /kg/i.test(hint) ? '70' : '150';
-          } else if (isAge) {
-            value = '30';
-          } else if (/(height|weight|age|cm|kg|ft|in|lb)/i.test(hint)) {
-            value = '5';
-          }
-          await input.fill(value).catch(() => undefined);
-        }
+        await this.fillTextStep();
         break;
       }
       case 'info':
@@ -179,6 +214,59 @@ export class SurveyPage extends BasePage {
         break;
     }
     return type;
+  }
+
+  /**
+   * Fill a text/number input step. The screen kind (height / current weight
+   * / goal weight / age / email) is detected by matching the heading against
+   * the localized i18n value for that screen's title key — so it works in
+   * every locale, not just English. Inputs are then filled positionally with
+   * values that satisfy the form's validators under the default unit system
+   * (imperial): height = 5 ft 8 in, weight = 150 lb, goal weight = 140 lb
+   * (must stay below current weight), age = 30.
+   */
+  private async fillTextStep(): Promise<void> {
+    const inputs = await this.rootScope
+      .locator(
+        'input[type="text"]:visible, input[type="email"]:visible, input[type="number"]:visible, input:not([type]):visible',
+      )
+      .all();
+    if (inputs.length === 0) return;
+
+    const heading = (await this.rootScope.locator('h1, h2').first().textContent())?.trim() ?? '';
+    const matches = (key: string) => {
+      if (!this.i18n.has(key)) return false;
+      const expected = this.i18n.get(key).replace(/\s+/g, ' ').trim().toLowerCase();
+      return expected.length > 0 && heading.replace(/\s+/g, ' ').toLowerCase().includes(expected);
+    };
+
+    const isHeight = matches('height_title');
+    const isGoalWeight = matches('goalWeight_title');
+    const isCurrentWeight = matches('currentWeight_title') && !isGoalWeight;
+
+    for (let i = 0; i < inputs.length; i++) {
+      const input = inputs[i];
+      const type = (await input.getAttribute('type')) ?? '';
+      const hint = `${type} ${(await input.getAttribute('aria-label')) ?? ''} ${
+        (await input.getAttribute('placeholder')) ?? ''
+      }`.toLowerCase();
+
+      let value = '30'; // sensible numeric default (age etc.)
+      if (type === 'email' || /email|@/.test(hint)) {
+        value = 'manyas-e2e@example.test';
+      } else if (isHeight) {
+        // First field = ft (or cm), second = in. 5 ft 8 in is valid imperial;
+        // if the default tab is metric, "5" then "8" still parses as cm-ish
+        // and the form re-validates — we rely on the imperial default that
+        // the live app ships with.
+        value = i === 0 ? '5' : '8';
+      } else if (isGoalWeight) {
+        value = '140'; // below the 150 current weight we enter
+      } else if (isCurrentWeight) {
+        value = '150';
+      }
+      await input.fill(value).catch(() => undefined);
+    }
   }
 
   /**
