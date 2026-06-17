@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { DEVICES, getDevice } from '../../src/config/devices';
 
-test('DEVICES contains iphone17, iphone16promax, s20e', () => {
-  const codes = DEVICES.map((d) => d.code).sort();
-  expect(codes).toEqual(['iphone16promax', 'iphone17', 's20e']);
+test('exposes the three target devices', () => {
+  expect(DEVICES.map((d) => d.code)).toEqual(['iphone17pro', 'iphone16promax', 's20']);
 });
 
 test('every device has viewport, DSR, UA, hasTouch=true, isMobile=true', () => {
@@ -17,11 +16,11 @@ test('every device has viewport, DSR, UA, hasTouch=true, isMobile=true', () => {
   }
 });
 
-test('iphone17 viewport is 402x874', () => {
-  const d = getDevice('iphone17');
+test('iphone17pro viewport is 402x874', () => {
+  const d = getDevice('iphone17pro');
   expect(d.viewport).toEqual({ width: 402, height: 874 });
 });
 
 test('getDevice("nope") throws', () => {
-  expect(() => getDevice('nope' as any)).toThrow(/Unknown device/);
+  expect(() => getDevice('nope' as never)).toThrow(/Unknown device/);
 });

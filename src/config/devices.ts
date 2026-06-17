@@ -1,4 +1,4 @@
-export type DeviceCode = 'iphone17' | 'iphone16promax' | 's20e';
+export type DeviceCode = 'iphone17pro' | 'iphone16promax' | 's20';
 
 export interface DeviceDescriptor {
   code: DeviceCode;
@@ -18,7 +18,7 @@ const SAMSUNG_UA =
 
 export const DEVICES: readonly DeviceDescriptor[] = [
   {
-    code: 'iphone17',
+    code: 'iphone17pro',
     viewport: { width: 402, height: 874 },
     deviceScaleFactor: 3,
     userAgent: IPHONE_UA_19,
@@ -34,8 +34,8 @@ export const DEVICES: readonly DeviceDescriptor[] = [
     isMobile: true,
   },
   {
-    code: 's20e',
-    viewport: { width: 360, height: 780 },
+    code: 's20',
+    viewport: { width: 360, height: 800 },
     deviceScaleFactor: 3,
     userAgent: SAMSUNG_UA,
     hasTouch: true,
