@@ -275,7 +275,7 @@ export function importXlsx(xlsxPath: string, outDir: string): ImportResult {
 // CLI entrypoint (when run directly via tsx)
 if (import.meta.url && fileURLToPath(import.meta.url) === path.resolve(process.argv[1] ?? '')) {
   const xlsxPath = path.join(process.cwd(), 'WWLI Onboarding Localisation.xlsx');
-  const outDir = path.join(process.cwd(), 'tests/fixtures/i18n');
+  const outDir = path.join(process.cwd(), 'tests/translations');
   const result = importXlsx(xlsxPath, outDir);
   console.log(`Imported ${result.totalKeys} keys. Skipped: ${result.skippedRows.length}.`);
 }

@@ -1,5 +1,0 @@
-{
-  "_comment": "Visible ASCII strings that look like i18n keys (snake_case / dotted / camelCase + underscore/period) but are legitimate UI content. Used by tests/localization/no-missing-keys.spec.ts to suppress false positives. Add to `exact` for literal strings, `patterns` for regex.",
-  "exact": ["email", "ok", "next", "info", "stripe", "iphone", "android", "i.e.", "e.g."],
-  "patterns": ["^https?://", "@[a-z]+\\.[a-z]+$"]
-}

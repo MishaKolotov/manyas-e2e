@@ -9,7 +9,7 @@ import {
   classifyRow,
   normalizeValue,
   slugifyEnglish,
-} from '../../src/utils/excel-to-json';
+} from '../../src/utils/import-translations';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURE = path.join(__dirname, '__importer-test-input.xlsx');
