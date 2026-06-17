@@ -32,20 +32,20 @@ test('loadEnv error lists every missing var', () => {
   });
 });
 
-test('loadEnv returns parsed config when all vars present', () => {
+test('loadEnv returns only creds and baseUrl when all vars present', () => {
   withEnv(
     {
       BASIC_AUTH_USER: 'user',
       BASIC_AUTH_PASS: 'pass',
       BASE_URL: 'https://example.test',
-      SURVEY_PATH: '/survey/',
-      FEATURE_FLAGS: 'stripeV64=true',
     },
     () => {
       const cfg = loadEnv();
-      expect(cfg.basicAuthUser).toBe('user');
-      expect(cfg.baseUrl).toBe('https://example.test');
-      expect(cfg.featureFlags).toBe('stripeV64=true');
+      expect(cfg).toEqual({
+        basicAuthUser: 'user',
+        basicAuthPass: 'pass',
+        baseUrl: 'https://example.test',
+      });
     },
   );
 });
