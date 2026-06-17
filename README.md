@@ -1,8 +1,13 @@
-# Manyas E2E — Walking Survey Localization Tests
+# Manyas E2E — Onboarding Localization Tests
 
-End-to-end localization tests for the Walking Survey funnel at
-[dev.slimkit.health](https://dev.slimkit.health/walking/survey/?stripeV64=true).
-The matrix is 10 locales × 3 devices × 2 browser engines = **60 Playwright projects**.
+Playwright tests that walk the Walking-Survey **onboarding** (up to the paywall)
+across **10 locales × 3 devices × 2 browser engines = 60 projects**, for every
+URL-config. They verify translations match the spreadsheet and that text renders
+without breaking, and attach a screenshot of every screen to the HTML report for
+QA to eyeball.
+
+> Full rationale: [`docs/superpowers/specs/2026-06-15-onboarding-localization-design.md`](docs/superpowers/specs/2026-06-15-onboarding-localization-design.md).
+> Step-by-step beginner guide (Russian): [`docs/beginner-guide-ru.md`](docs/beginner-guide-ru.md).
 
 ## Quick start
 
@@ -11,135 +16,81 @@ nvm use                       # Node 20
 npm install
 npm run install:browsers      # Chromium + WebKit (~500 MB)
 cp .env.example .env
-# edit .env: set BASIC_AUTH_USER=dev and BASIC_AUTH_PASS=gPgFCeJ7
-npm run i18n:import           # one-shot xlsx → JSON
-npm test                      # full matrix (~45 min)
+# edit .env: BASIC_AUTH_USER=dev, BASIC_AUTH_PASS=gPgFCeJ7
+npm run i18n:import           # one-shot: spreadsheet export → JSON
+npm run test:smoke            # EN only, fast sanity check
 ```
-
-The first run will take longer because Playwright downloads its browser
-bundles and the importer parses the 5 MB localization spreadsheet.
-
-## Common tasks
-
-| What                                                 | Command                                                |
-|------------------------------------------------------|--------------------------------------------------------|
-| Smoke run (EN only, fast)                            | `npm run test:smoke`                                   |
-| Single locale × device × engine                      | `npx playwright test --project=ru__iphone17__webkit`   |
-| All RU variants                                      | `npx playwright test --project='/ru__.*/'`             |
-| One spec, headed                                     | `npm run test:headed -- tests/localization/landing.spec.ts` |
-| Open HTML report                                     | `npm run test:report`                                  |
-| Update visual baselines after intentional UI changes | `npm run test:update-snapshots`                        |
-| Re-import translations after new xlsx                | `npm run i18n:import`                                  |
-| Verify fixtures are in sync with xlsx                | `npm run i18n:check`                                   |
-| Clean reports and per-test artefacts                 | `npm run test:clean`                                   |
-| Lint / typecheck / format                            | `npm run lint` / `npm run typecheck` / `npm run format` |
-
-## Project matrix
-
-60 Playwright projects: every combination of
-`{en,fr,it,es,ja,ru,de,pt,zh,ko} × {iphone17, iphone16promax, s20e} ×
-{chromium, webkit}`. Naming: `<locale>__<device>__<engine>`.
 
 ## What gets tested
 
-| Spec                                  | Asserts                                                         |
-|---------------------------------------|-----------------------------------------------------------------|
-| `tests/localization/landing.spec.ts`  | The splash renders localized headline + subtitle + loader + disclaimer for the project's locale; no horizontal overflow. |
-| `tests/localization/survey-flow.spec.ts` | The funnel walks from splash to paywall using detect-and-answer, exercising the full localized survey.               |
-| `tests/localization/paywall.spec.ts`  | Paywall heading + CTA + locale-formatted price are present.    |
-| `tests/localization/no-missing-keys.spec.ts` | No leaked i18n keys (`intro_text_0`-shaped strings) or `{{template}}` placeholders are visible at any step.    |
-| `tests/localization/visual.spec.ts`   | Pixel snapshots of landing, first survey step, and paywall.    |
+The single spec [`tests/onboarding.spec.ts`](tests/onboarding.spec.ts) drives the
+funnel from the first screen until the URL switches to `plan_ready_v2` (the
+paywall — **not tested**). On **every** screen it checks:
 
-## Important constraints
+- **No leaked i18n keys** — no `intro_text_0`-shaped strings or `{{placeholder}}`
+  are visible.
+- **No layout break** — no horizontal overflow.
+- **A screenshot** is attached to the HTML report (open it and eyeball each
+  screen for correct, well-fitting translations).
 
-- **Locale is set by the browser**, not URL parameters or in-app language switchers.
-  Tests verify that the funnel honors `navigator.language` / `Accept-Language`.
-- **Playwright WebKit is NOT iOS Safari.** Snapshots on `webkit + iphone17` are an
-  approximation; iOS-only quirks (viewport-unit URL bar behaviour, input zoom,
-  momentum scrolling, safe-area insets) are not exercised. Real-device testing
-  remains out of scope.
-- **xlsx is the frozen source of truth for translations.** A diff between xlsx
-  and live app is a bug, not a test infrastructure problem.
+It also does an **exact-match anchor check**: known screen titles (e.g. the
+walking-level question) must render with the locale's exact translation from the
+spreadsheet. Add anchors by editing `REQUIRED_TITLE_KEYS` / `KNOWN_TITLE_KEYS` in
+[`src/pages/OnboardingPage.ts`](src/pages/OnboardingPage.ts).
 
-## Snapshot scope
+## Common tasks
 
-Following spec §8.3 (in `docs/superpowers/specs/2026-05-26-e2e-localization-design.md`):
+| What | Command |
+|------|---------|
+| Smoke run (EN only, fast) | `npm run test:smoke` |
+| Full matrix, all configs | `npm test` |
+| One config only | `TEST_CONFIG=taichiwalking npm test` |
+| One locale × device × engine | `npx playwright test --project=ru__iphone17pro__webkit` |
+| All RU variants | `npx playwright test --project='/ru__.*/'` |
+| Headed (watch the browser) | `npm run test:headed` |
+| Open the HTML report | `npm run test:report` |
+| Re-import translations | `npm run i18n:import` |
+| Clean reports/artefacts | `npm run test:clean` |
+| Typecheck | `npm run typecheck` |
 
-- Landing: EN × 3 devices × 2 engines + 9 non-EN locales × iPhone 17 × 2 engines = 24 PNG.
-- First survey step: EN only × 3 devices × 2 engines = 6 PNG.
-- Paywall: same shape as landing = 24 PNG.
-- Total ~54 baselines.
+## URL-configs
 
-The non-EN device coverage is intentionally narrowed to iPhone 17 so a copy
-change for a single locale ends up touching at most 2 PNGs, not 6.
+All funnel variants live in one file:
+[`src/config/configs.ts`](src/config/configs.ts). To add a funnel, add one line
+(`{ name, path, params }`). Variant **B** of every A/B test is forced
+automatically via `AValue=0&BValue=100` (toggle with `FORCE_B`). Pick which
+config(s) run with `TEST_CONFIG=<name>`; unset runs all.
+
+## Project matrix
+
+`{en,fr,it,es,ja,ru,de,pt,zh,ko} × {iphone17pro, iphone16promax, s20} ×
+{chromium, webkit}`. Project name: `<locale>__<device>__<engine>`, e.g.
+`ru__iphone17pro__webkit`. The locale is set by the **browser** (Playwright's
+`locale`/`Accept-Language`), not by URL parameters or an in-app switcher.
 
 ## Updating translations
 
-1. Replace `WWLI Onboarding Localisation.xlsx` in the repo root.
+The spreadsheet
+([Google Sheet](https://docs.google.com/spreadsheets/d/1Rzp4iq6qcAh7untkPPXRMYjZOvbRLF0tuwoyzPBZsuo))
+is the source of truth.
+
+1. Export it as `.xlsx` and replace `WWLI Onboarding Localisation.xlsx` in the repo root.
 2. `npm run i18n:import`.
-3. `git diff tests/fixtures/i18n/*.json` — verify which strings changed.
-4. Run the test suite; failures highlight where the deployed app has not
-   caught up to the new copy.
-5. Commit the xlsx and the JSON fixtures together.
+3. `git diff tests/translations/*.json` — verify which strings changed.
+4. Run the tests; failures show where the deployed app has not caught up.
+5. Commit the xlsx and the JSON together.
 
-## Project layout
+## Known limitations
 
+- **Playwright WebKit is not iOS Safari.** Snapshots on `webkit + iphone17pro`
+  approximate iOS; iOS-only quirks (URL-bar viewport, input zoom, momentum
+  scrolling, safe-area insets) are not exercised.
+- **Meta in-app browsers (Facebook / Instagram) are out of automation scope** —
+  they are native webviews Playwright cannot drive. Test those manually on real
+  devices.
+- **Device UA strings are approximations** (iPhone 17 Pro is new). They suit
+  client-side mobile emulation, not UA-dependent backend branching.
+- **Selectors are calibrated against the live dev app** and have no `data-testid`
+  to rely on; new screens may need the detect-and-answer selectors extended in
+  `OnboardingPage.ts`.
 ```
-src/
-  config/             Locales, devices, projects matrix, env loader
-  fixtures/           Playwright i18n fixture (injects translations per project)
-  pages/              Page Object Model (Base / Landing / Survey / Paywall)
-  utils/              xlsx importer, i18n loader / check, visual helpers, wait-stable
-tests/
-  config/             Unit tests for the configs above
-  utils/              Unit tests for the importer + i18n-check + i18n-loader
-  fixtures/i18n/      Per-locale JSON files generated from xlsx (committed)
-  helpers/            Survey-flow detect-and-answer driver
-  localization/       The five spec files listed earlier
-docs/
-  superpowers/
-    specs/            Design specification
-    plans/            Step-by-step implementation plan
-    notes/            Discovery notes from the live-app walk
-  guides/             Russian-language onboarding guide for beginners
-```
-
-## Status snapshot (2026-05-26)
-
-What is **verified end-to-end** against the live dev stand:
-
-- All five spec files run against `en__iphone17__chromium`.
-  `landing.spec.ts`, `survey-flow.spec.ts`, and `paywall.spec.ts` pass.
-- `landing.spec.ts` additionally verified on `ru`, `de`, `ja`, `zh`
-  (`iphone17 × chromium`).
-- The 60-project matrix materialises correctly: `npx playwright test --list`
-  reports 60 unique project ids.
-- The importer produces 11 fixture files (10 locales + `_meta.json`) from
-  the live xlsx; 1328 keys imported, 98 cross-sheet duplicates logged, 83
-  rows skipped (markers / emoji / Russian-internal notes).
-
-What still needs **hand-finishing** (known limitations):
-
-- `survey-flow.spec.ts` / `paywall.spec.ts` / `no-missing-keys.spec.ts`
-  / `visual.spec.ts` have been verified on EN but not yet on the full
-  matrix. The survey-flow detect-and-answer helper is locale-sensitive in a
-  few places (e.g. the input-validation messages that drive height/weight
-  defaults are EN strings). Expect to tune `SurveyPage` heading regexes for
-  RU/DE/JA/ZH/KO when the cross-locale run finds the next surprise.
-- Visual baselines (`*-snapshots/` folders) are not yet generated. Run
-  `npm run test:update-snapshots` from a known-good build to produce them,
-  then commit the PNGs.
-- Three open spec items from §12 are not yet closed:
-  1. **pt-PT vs pt-BR** — locale config currently uses `pt-PT`; verify
-     against the live `Accept-Language: pt-BR` response and update
-     `src/config/locales.ts` if the app actually serves Brazilian
-     Portuguese.
-  2. **UA-smoke** — compare server responses for our iPhone 17 UA stub
-     vs a real iOS UA and document the result.
-  3. **MAX_STEPS calibration** — `tests/helpers/survey-flow.ts` currently
-     defaults to 120. Run a clean walk and tighten to `ceil(observed × 1.5)`.
-
-See `docs/superpowers/specs/2026-05-26-e2e-localization-design.md` for the
-full design rationale and `docs/superpowers/plans/2026-05-26-e2e-localization-plan.md`
-for the original implementation plan. The Russian-language beginner guide is
-at `docs/guides/playwright-beginner-guide-ru.md`.
