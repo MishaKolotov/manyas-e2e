@@ -83,13 +83,21 @@ is the source of truth.
 ## Calibration status
 
 The detect-and-answer driver is calibrated against the live dev funnel, which
-has no `data-testid`s. **Verified end-to-end to the paywall:** `default` (EN, RU)
-and `taichiwalking` (EN). The `japanesewalking` funnel is longer and has extra
-screen types (Likert statement scales, "important event" cards); its tail still
-needs a little more selector calibration in
-[`OnboardingPage.ts`](src/pages/OnboardingPage.ts). Cross-locale/device breadth
-(all 60 projects × 3 configs) is the ongoing QA calibration the suite is built
-for — extend selectors/anchors as new screens surface, one line at a time.
+has **no `data-testid`s** and serves a **variable funnel** (A/B branching, so the
+set and order of screens changes run to run). The driver reliably walks the
+first ~20 screens — cover, age, gender, walking level (anchor checked), the
+question screens, and the height/current-weight measurement screens — running
+the localization checks and attaching a screenshot on every screen. Full early
+runs reached the paywall (`default` EN ~1.6 min, RU ~1.9 min) when the funnel
+served its shorter variant.
+
+The funnel **tail uses custom widgets** that still need per-widget calibration
+in [`OnboardingPage.ts`](src/pages/OnboardingPage.ts): a goal-weight slider, a
+results-date scroll-picker (skipped), Likert statement scales (`japanesewalking`),
+and image-card "important event" / body-type screens. Extend the handlers and
+anchors there one screen at a time — this is the ongoing QA calibration the suite
+is built for. Run headed (`npm run test:headed`) to watch where a walk stalls and
+add the matching selector/handler.
 
 ## Known limitations
 
