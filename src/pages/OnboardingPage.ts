@@ -163,7 +163,7 @@ export class OnboardingPage extends BasePage {
   async advance(): Promise<void> {
     // The CTA often appears/enables a moment after an answer is selected.
     const cta = this.page.locator('button:visible').filter({ hasText: ADVANCE_LABELS }).first();
-    await cta.waitFor({ state: 'visible', timeout: 1200 }).catch(() => undefined);
+    await cta.waitFor({ state: 'visible', timeout: 700 }).catch(() => undefined);
     if (await cta.isVisible().catch(() => false)) {
       if (await cta.isEnabled().catch(() => false)) {
         await cta.click().catch(() => undefined);

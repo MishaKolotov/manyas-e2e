@@ -9,7 +9,9 @@ const configs = selectedConfigs(process.env.TEST_CONFIG);
 
 for (const config of configs) {
   test(`onboarding renders correctly · config=${config.name}`, async ({ page, context }, testInfo) => {
-    testInfo.setTimeout(180_000);
+    // Some funnels (e.g. japanesewalking) run 40+ screens; with a per-screen
+    // screenshot and settle this needs well over the default 30s.
+    testInfo.setTimeout(300_000);
     const locale = (testInfo.project.metadata as { locale: LocaleCode }).locale;
     const onboarding = new OnboardingPage(page, context, env.baseUrl);
     await onboarding.goto(config);
