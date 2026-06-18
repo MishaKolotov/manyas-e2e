@@ -1,0 +1,6 @@
+{
+  "_note": "Visible ASCII strings that look like i18n keys but are legitimate (brand names, review-author handles, etc.). Add a string here when a leaked-key failure is a confirmed false positive. See spec section 8.2.",
+  "allowed": [
+    "david_t."
+  ]
+}

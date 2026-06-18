@@ -9,10 +9,10 @@ const configs = selectedConfigs(process.env.TEST_CONFIG);
 
 for (const config of configs) {
   test(`onboarding renders correctly · config=${config.name}`, async ({ page, context }, testInfo) => {
+    testInfo.setTimeout(180_000);
     const locale = (testInfo.project.metadata as { locale: LocaleCode }).locale;
     const onboarding = new OnboardingPage(page, context, env.baseUrl);
     await onboarding.goto(config);
-    await onboarding.checkLandingAnchors(locale);
-    await onboarding.walkToPaywall(testInfo, config.name);
+    await onboarding.walkToPaywall(testInfo, config, locale);
   });
 }

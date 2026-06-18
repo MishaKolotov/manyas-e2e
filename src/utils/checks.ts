@@ -1,5 +1,26 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import { expect, type Page, type TestInfo } from '@playwright/test';
 import { normalizeText } from './normalize';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const WHITELIST_FILE = join(here, '..', '..', 'tests', 'translations', '_leaked-whitelist.json');
+
+let whitelistCache: Set<string> | undefined;
+
+/** Strings that look like keys but are legitimate visible copy (spec §8.2). */
+function leakedKeyWhitelist(): Set<string> {
+  if (!whitelistCache) {
+    try {
+      const raw = JSON.parse(readFileSync(WHITELIST_FILE, 'utf8')) as { allowed?: string[] };
+      whitelistCache = new Set(raw.allowed ?? []);
+    } catch {
+      whitelistCache = new Set();
+    }
+  }
+  return whitelistCache;
+}
 
 /**
  * Heuristic: does this visible string look like a raw i18n key or an
@@ -28,19 +49,32 @@ export async function assertNoHorizontalOverflow(page: Page, where: string): Pro
   expect(overflow, `Horizontal overflow of ${overflow}px at ${where}`).toBeLessThanOrEqual(1);
 }
 
-/** Scan all visible text nodes for leaked i18n keys; fail listing offenders. */
+/** Scan only VISIBLE text nodes for leaked i18n keys; fail listing offenders. */
 export async function assertNoLeakedKeys(page: Page, where: string): Promise<void> {
   const texts = await page.evaluate(() => {
+    const isVisible = (el: Element | null): boolean => {
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      const s = getComputedStyle(el);
+      return (
+        r.width > 0 &&
+        r.height > 0 &&
+        s.visibility !== 'hidden' &&
+        s.display !== 'none' &&
+        s.opacity !== '0'
+      );
+    };
     const out: string[] = [];
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     let n: Node | null;
     while ((n = walker.nextNode())) {
       const s = (n.textContent ?? '').trim();
-      if (s) out.push(s);
+      if (s && isVisible(n.parentElement)) out.push(s);
     }
     return out;
   });
-  const leaked = texts.filter((t) => looksLikeLeakedKey(t));
+  const whitelist = leakedKeyWhitelist();
+  const leaked = texts.filter((t) => looksLikeLeakedKey(t) && !whitelist.has(t.trim()));
   expect(leaked, `Leaked i18n keys at ${where}: ${JSON.stringify(leaked)}`).toEqual([]);
 }
 
