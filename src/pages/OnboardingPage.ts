@@ -323,32 +323,6 @@ export class OnboardingPage extends BasePage {
       await this.answerCurrentStep();
       await this.advance();
       await this.waitForScreenChange(before);
-
-      // Recovery: if the screen did not change (flaky tap, or a screen that
-      // advances via the borderless "next" arrow), click that arrow once. This
-      // only fires when stuck, so auto-advancing screens are unaffected.
-      if (!(await this.isPaywallReached())) {
-        const after = await this.screenSignature();
-        if (after === before) {
-          // Only use the arrow when there is no text CTA — otherwise the right
-          // action is to (re)select an answer and click that CTA, not navigate.
-          const textCta = this.page
-            .locator('button:visible')
-            .filter({ hasText: ADVANCE_LABELS })
-            .first();
-          const hasTextCta = await textCta.isVisible().catch(() => false);
-          if (!hasTextCta) {
-            const nextIcon = this.page.getByRole('button', { name: /^next$/i }).first();
-            if (
-              (await nextIcon.isVisible().catch(() => false)) &&
-              (await nextIcon.isEnabled().catch(() => false))
-            ) {
-              await nextIcon.click().catch(() => undefined);
-              await this.waitForScreenChange(before);
-            }
-          }
-        }
-      }
       consumed = step;
     }
 
