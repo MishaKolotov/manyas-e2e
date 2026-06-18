@@ -189,7 +189,62 @@ export class OnboardingPage extends BasePage {
     return raw.map(normalizeText);
   }
 
-  /** Wait until the visible headings differ from `prev`, or time out quietly. */
+  /**
+   * Wait for visible images to finish loading. Image-card choice screens (e.g.
+   * body type) shift layout as images load; clicking before they settle makes
+   * the tap miss, so the funnel never advances.
+   */
+  private async waitForImages(): Promise<void> {
+    await this.page
+      .evaluate(
+        () =>
+          new Promise<void>((resolve) => {
+            const imgs = [...document.images].filter((i) => {
+              const r = i.getBoundingClientRect();
+              return r.width > 0 && r.height > 0;
+            });
+            const pending = imgs.filter((i) => !i.complete);
+            if (pending.length === 0) return resolve();
+            let left = pending.length;
+            const done = () => {
+              if (--left <= 0) resolve();
+            };
+            pending.forEach((i) => {
+              i.addEventListener('load', done, { once: true });
+              i.addEventListener('error', done, { once: true });
+            });
+            setTimeout(resolve, 3000);
+          }),
+      )
+      .catch(() => undefined);
+  }
+
+  /**
+   * Signature of the current screen: visible headings plus the first visible
+   * paragraph. Consecutive screens that share a heading (e.g. Likert
+   * "Do you relate to the following statement?" with different statements)
+   * still differ by their paragraph, so the walk can tell them apart.
+   */
+  private async screenSignature(): Promise<string> {
+    return this.page.evaluate(() => {
+      const isVisible = (el: Element) => {
+        const r = el.getBoundingClientRect();
+        const s = getComputedStyle(el);
+        return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none';
+      };
+      const heads = [...document.querySelectorAll('h1,h2,h3')]
+        .filter(isVisible)
+        .map((e) => (e as HTMLElement).innerText.trim())
+        .filter(Boolean);
+      const firstPara = [...document.querySelectorAll('p')]
+        .filter(isVisible)
+        .map((e) => (e as HTMLElement).innerText.trim())
+        .filter(Boolean)[0];
+      return [...heads, firstPara ?? ''].join(' | ');
+    });
+  }
+
+  /** Wait until the screen signature differs from `prev`, or time out quietly. */
   private async waitForScreenChange(prev: string): Promise<void> {
     await this.page
       .waitForFunction(
@@ -199,11 +254,15 @@ export class OnboardingPage extends BasePage {
             const s = getComputedStyle(el);
             return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none';
           };
-          const sig = [...document.querySelectorAll('h1,h2,h3')]
+          const heads = [...document.querySelectorAll('h1,h2,h3')]
             .filter(isVisible)
             .map((e) => (e as HTMLElement).innerText.trim())
-            .filter(Boolean)
-            .join(' | ');
+            .filter(Boolean);
+          const firstPara = [...document.querySelectorAll('p')]
+            .filter(isVisible)
+            .map((e) => (e as HTMLElement).innerText.trim())
+            .filter(Boolean)[0];
+          const sig = [...heads, firstPara ?? ''].join(' | ');
           return sig !== previous || location.href.includes('plan_ready_v2');
         },
         prev,
@@ -248,10 +307,28 @@ export class OnboardingPage extends BasePage {
       await this.dismissCookieBanner();
       await this.checkCurrentScreen(testInfo, `${config.name} · step ${step}`, locale, seen);
 
-      const before = (await this.visibleHeadings()).join(' | ');
+      const before = await this.screenSignature();
+      await this.waitForImages();
       await this.answerCurrentStep();
       await this.advance();
       await this.waitForScreenChange(before);
+
+      // Recovery: if the screen did not change (flaky tap, or a screen that
+      // advances via the borderless "next" arrow), click that arrow once. This
+      // only fires when stuck, so auto-advancing screens are unaffected.
+      if (!(await this.isPaywallReached())) {
+        const after = await this.screenSignature();
+        if (after === before) {
+          const nextIcon = this.page.getByRole('button', { name: /^next$/i }).first();
+          if (
+            (await nextIcon.isVisible().catch(() => false)) &&
+            (await nextIcon.isEnabled().catch(() => false))
+          ) {
+            await nextIcon.click().catch(() => undefined);
+            await this.waitForScreenChange(before);
+          }
+        }
+      }
       consumed = step;
     }
 
