@@ -21,6 +21,9 @@ const ADVANCE_LABELS =
 const NON_ANSWER =
   /^(prev|previous|next|back|close|skip|done)$|continue|next|skip|back|prev|close|done|got it|privacy|terms|accept all|accept|allow|cookie|далее|назад|продолжить|готово|weiter|続ける|次へ|完了|다음|继续/i;
 
+/** Metric unit-toggle labels (height cm / weight kg) across our 10 locales. */
+const METRIC_UNIT = /^(cm|см|kg|кг|厘米|千克|公斤|センチ|キロ|킬로그램|센티미터)$/i;
+
 /** "Skip" labels for optional screens (e.g. the results-date picker). */
 const SKIP_LABELS =
   /skip|пропустить|überspringen|passer|sauter|saltar|salta|スキップ|スキップする|건너뛰기|跳过|跳過/i;
@@ -79,21 +82,15 @@ export class OnboardingPage extends BasePage {
 
   /** Pick the first valid answer on the current screen, whatever its type. */
   async answerCurrentStep(): Promise<void> {
-    // Measurement screens use locale-independent unit tabs (CM/FT for height,
-    // KG/LB for weight). Pick the metric unit to get a single input, then fill
-    // a value inside the valid range.
-    const cm = this.page.getByRole('button', { name: /^cm$/i }).first();
-    if (await cm.isVisible().catch(() => false)) {
-      await cm.click().catch(() => undefined);
-      await this.fillMeasurement(['170', '165', '160', '175']);
-      return;
-    }
-    const kg = this.page.getByRole('button', { name: /^kg$/i }).first();
-    if (await kg.isVisible().catch(() => false)) {
-      await kg.click().catch(() => undefined);
-      // Goal-weight screens require a value below the current weight, so try
-      // descending candidates until the advance button enables.
-      await this.fillMeasurement(['70', '65', '60', '55']);
+    // Measurement screens (height/weight). The unit tabs are localized
+    // (CM/KG, см/кг, ...), so match the metric unit across locales and switch
+    // to it for a single input. One descending candidate list satisfies height
+    // (cm), current weight (kg) and goal weight (< current) without needing to
+    // tell them apart — the first value that enables the CTA wins.
+    const metric = this.page.getByRole('button', { name: METRIC_UNIT }).first();
+    if (await metric.isVisible().catch(() => false)) {
+      await metric.click().catch(() => undefined);
+      await this.fillMeasurement(['170', '70', '65', '60', '55', '50']);
       return;
     }
 
