@@ -21,8 +21,10 @@ const ADVANCE_LABELS =
 const NON_ANSWER =
   /^(prev|previous|next|back|close|skip|done)$|continue|next|skip|back|prev|close|done|got it|privacy|terms|accept all|accept|allow|cookie|далее|назад|продолжить|готово|weiter|続ける|次へ|完了|다음|继续/i;
 
-/** Metric unit-toggle labels (height cm / weight kg) across our 10 locales. */
-const METRIC_UNIT = /^(cm|см|kg|кг|厘米|千克|公斤|センチ|キロ|킬로그램|센티미터)$/i;
+/** Metric height unit-toggle labels (cm) across our 10 locales. */
+const HEIGHT_UNIT = /^(cm|см|厘米|センチ|センチメートル|센티미터)$/i;
+/** Metric weight unit-toggle labels (kg) across our 10 locales. */
+const WEIGHT_UNIT = /^(kg|кг|千克|公斤|キロ|キログラム|킬로그램)$/i;
 
 /** "Skip" labels for optional screens (e.g. the results-date picker). */
 const SKIP_LABELS =
@@ -82,19 +84,47 @@ export class OnboardingPage extends BasePage {
 
   /** Pick the first valid answer on the current screen, whatever its type. */
   async answerCurrentStep(): Promise<void> {
-    // Measurement screens (height/weight). The unit tabs are localized
-    // (CM/KG, см/кг, ...), so match the metric unit across locales and switch
-    // to it for a single input. One descending candidate list satisfies height
-    // (cm), current weight (kg) and goal weight (< current) without needing to
-    // tell them apart — the first value that enables the CTA wins.
-    const metric = this.page.getByRole('button', { name: METRIC_UNIT }).first();
-    if (await metric.isVisible().catch(() => false)) {
-      await metric.click().catch(() => undefined);
-      await this.fillMeasurement(['170', '70', '65', '60', '55', '50']);
+    // Measurement screens (height/weight). Unit tabs are localized, so match
+    // the metric unit across locales and switch to it for a single input.
+    // Height and weight must use realistic values — a 170 kg weight produces an
+    // obese BMI and then no goal weight is valid, stalling the funnel.
+    const cm = this.page.getByRole('button', { name: HEIGHT_UNIT }).first();
+    if (await cm.isVisible().catch(() => false)) {
+      await cm.click().catch(() => undefined);
+      await this.fillMeasurement(['170', '175', '165', '160']);
+      return;
+    }
+    const kg = this.page.getByRole('button', { name: WEIGHT_UNIT }).first();
+    if (await kg.isVisible().catch(() => false)) {
+      await kg.click().catch(() => undefined);
+      // Descending so goal weight (must be < current) also finds a valid value.
+      await this.fillMeasurement(['70', '65', '60', '55', '50']);
       return;
     }
 
-    // Generic numeric / text / email input (e.g. age, name, email).
+    // Choice screens: answers are <button> elements. Click the first button
+    // whose label is not navigation/legal/consent chrome. This runs BEFORE the
+    // generic-input branch so that a choice screen with an "Other" text field
+    // (e.g. "Do you have an important event?") still picks a real option
+    // instead of typing into the Other box and stalling.
+    const buttons = this.page.locator('button:visible');
+    const count = await buttons.count();
+    for (let i = 0; i < count; i++) {
+      const b = buttons.nth(i);
+      const label = (await b.innerText().catch(() => '')).trim();
+      if (!label || NON_ANSWER.test(label)) continue;
+      await b.click().catch(() => undefined);
+      return;
+    }
+
+    // Slider.
+    const slider = this.page.locator('input[type="range"]:visible').first();
+    if (await slider.isVisible().catch(() => false)) {
+      await slider.press('ArrowRight').catch(() => undefined);
+      return;
+    }
+
+    // Input-only screens (age, name, email): no answer button was found above.
     const input = this.page.locator('input:visible').first();
     if (await input.isVisible().catch(() => false)) {
       const type = await input.getAttribute('type');
@@ -111,25 +141,6 @@ export class OnboardingPage extends BasePage {
           .catch(() => undefined);
         return;
       }
-    }
-
-    // Slider.
-    const slider = this.page.locator('input[type="range"]:visible').first();
-    if (await slider.isVisible().catch(() => false)) {
-      await slider.press('ArrowRight').catch(() => undefined);
-      return;
-    }
-
-    // Choice screens: answers are <button> elements. Click the first button
-    // whose label is not navigation/legal/consent chrome.
-    const buttons = this.page.locator('button:visible');
-    const count = await buttons.count();
-    for (let i = 0; i < count; i++) {
-      const b = buttons.nth(i);
-      const label = (await b.innerText().catch(() => '')).trim();
-      if (!label || NON_ANSWER.test(label)) continue;
-      await b.click().catch(() => undefined);
-      return;
     }
 
     // Optional screens (e.g. the results-date scroll-picker) expose no answer
@@ -163,7 +174,7 @@ export class OnboardingPage extends BasePage {
   async advance(): Promise<void> {
     // The CTA often appears/enables a moment after an answer is selected.
     const cta = this.page.locator('button:visible').filter({ hasText: ADVANCE_LABELS }).first();
-    await cta.waitFor({ state: 'visible', timeout: 700 }).catch(() => undefined);
+    await cta.waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined);
     if (await cta.isVisible().catch(() => false)) {
       if (await cta.isEnabled().catch(() => false)) {
         await cta.click().catch(() => undefined);
@@ -319,13 +330,22 @@ export class OnboardingPage extends BasePage {
       if (!(await this.isPaywallReached())) {
         const after = await this.screenSignature();
         if (after === before) {
-          const nextIcon = this.page.getByRole('button', { name: /^next$/i }).first();
-          if (
-            (await nextIcon.isVisible().catch(() => false)) &&
-            (await nextIcon.isEnabled().catch(() => false))
-          ) {
-            await nextIcon.click().catch(() => undefined);
-            await this.waitForScreenChange(before);
+          // Only use the arrow when there is no text CTA — otherwise the right
+          // action is to (re)select an answer and click that CTA, not navigate.
+          const textCta = this.page
+            .locator('button:visible')
+            .filter({ hasText: ADVANCE_LABELS })
+            .first();
+          const hasTextCta = await textCta.isVisible().catch(() => false);
+          if (!hasTextCta) {
+            const nextIcon = this.page.getByRole('button', { name: /^next$/i }).first();
+            if (
+              (await nextIcon.isVisible().catch(() => false)) &&
+              (await nextIcon.isEnabled().catch(() => false))
+            ) {
+              await nextIcon.click().catch(() => undefined);
+              await this.waitForScreenChange(before);
+            }
           }
         }
       }

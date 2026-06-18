@@ -80,6 +80,17 @@ is the source of truth.
 4. Run the tests; failures show where the deployed app has not caught up.
 5. Commit the xlsx and the JSON together.
 
+## Calibration status
+
+The detect-and-answer driver is calibrated against the live dev funnel, which
+has no `data-testid`s. **Verified end-to-end to the paywall:** `default` (EN, RU)
+and `taichiwalking` (EN). The `japanesewalking` funnel is longer and has extra
+screen types (Likert statement scales, "important event" cards); its tail still
+needs a little more selector calibration in
+[`OnboardingPage.ts`](src/pages/OnboardingPage.ts). Cross-locale/device breadth
+(all 60 projects × 3 configs) is the ongoing QA calibration the suite is built
+for — extend selectors/anchors as new screens surface, one line at a time.
+
 ## Known limitations
 
 - **Playwright WebKit is not iOS Safari.** Snapshots on `webkit + iphone17pro`
