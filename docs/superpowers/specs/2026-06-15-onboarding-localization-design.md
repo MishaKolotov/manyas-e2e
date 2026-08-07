@@ -185,7 +185,7 @@ Playwright автоматически выставляет `Accept-Language`, `n
 ## 6. Переводы: Google-таблица → JSON
 
 **Источник:** Google-таблица
-(`docs.google.com/spreadsheets/d/1Rzp4iq6qcAh7untkPPXRMYjZOvbRLF0tuwoyzPBZsuo`).
+(`docs.google.com/spreadsheets/d/<client-sheet-id>`).
 QA экспортирует её в `.xlsx` в корень проекта.
 
 **Структура таблицы (по факту, проверено на текущем файле):**
@@ -337,7 +337,7 @@ Pixel-baseline снапшоты падают при любом изменени�
 
 ```
 BASIC_AUTH_USER=dev
-BASIC_AUTH_PASS=gPgFCeJ7
+BASIC_AUTH_PASS=<ask-the-project-owner>
 BASE_URL=https://dev.slimkit.health
 ```
 
@@ -378,7 +378,7 @@ HTML-отчёт (`reporter: [['list'], ['html']]`):
 
 1. Установка: Node 20 (через nvm), клон проекта, `npm install`,
    `npm run install:browsers`.
-2. Настройка `.env` (куда вписать креды `dev` / `gPgFCeJ7`).
+2. Настройка `.env` (куда вписать креды `dev` / `<ask-the-project-owner>`).
 3. Как **менять ссылки** (`src/config/configs.ts`) и **девайсы**
    (`src/config/devices.ts`).
 4. Что делать при **новых переводах** (экспорт таблицы → `npm run i18n:import`).

@@ -16,7 +16,7 @@ nvm use                       # Node 20
 npm install
 npm run install:browsers      # Chromium + WebKit (~500 MB)
 cp .env.example .env
-# edit .env: BASIC_AUTH_USER=dev, BASIC_AUTH_PASS=gPgFCeJ7
+# edit .env: BASIC_AUTH_USER=dev, BASIC_AUTH_PASS=<ask-the-project-owner>
 npm run i18n:import           # one-shot: spreadsheet export → JSON
 npm run test:smoke            # EN only, fast sanity check
 ```
@@ -71,7 +71,7 @@ config(s) run with `TEST_CONFIG=<name>`; unset runs all.
 ## Updating translations
 
 The spreadsheet
-([Google Sheet](https://docs.google.com/spreadsheets/d/1Rzp4iq6qcAh7untkPPXRMYjZOvbRLF0tuwoyzPBZsuo))
+([Google Sheet](<client-localisation-sheet-url>))
 is the source of truth.
 
 1. Export it as `.xlsx` and replace `WWLI Onboarding Localisation.xlsx` in the repo root.

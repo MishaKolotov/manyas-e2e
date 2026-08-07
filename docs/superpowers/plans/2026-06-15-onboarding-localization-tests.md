@@ -85,7 +85,7 @@ BASE_URL=https://dev.slimkit.health
 - [ ] **Step 3: Verify your local `.env` has the three vars**
 
 Run: `grep -E 'BASIC_AUTH_USER|BASIC_AUTH_PASS|BASE_URL' .env`
-Expected: three lines, `BASIC_AUTH_USER=dev`, `BASIC_AUTH_PASS=gPgFCeJ7`, `BASE_URL=https://dev.slimkit.health`.
+Expected: three lines, `BASIC_AUTH_USER=dev`, `BASIC_AUTH_PASS=<ask-the-project-owner>`, `BASE_URL=https://dev.slimkit.health`.
 
 - [ ] **Step 4: Commit**
 
@@ -1159,7 +1159,7 @@ git commit -m "docs: onboarding-only README and Russian beginner guide"
 **Files:**
 - Modify: `src/pages/OnboardingPage.ts`, `src/config/locales.ts`
 
-This task is hands-on against the live dev app (creds `dev` / `gPgFCeJ7`). Do it in headed mode.
+This task is hands-on against the live dev app (creds `dev` / `<ask-the-project-owner>`). Do it in headed mode.
 
 - [ ] **Step 1: Walk each config once in EN, headed, and confirm the loop reaches the paywall**
 

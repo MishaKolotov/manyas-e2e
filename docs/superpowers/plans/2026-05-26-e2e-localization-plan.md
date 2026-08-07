@@ -299,7 +299,7 @@ Then edit `.env` with real credentials:
 
 ```
 BASIC_AUTH_USER=dev
-BASIC_AUTH_PASS=gPgFCeJ7
+BASIC_AUTH_PASS=<ask-the-project-owner>
 BASE_URL=https://dev.slimkit.health
 SURVEY_PATH=/walking/survey/
 FEATURE_FLAGS=stripeV64=true
@@ -1940,7 +1940,7 @@ Open the app in your browser:
 https://dev.slimkit.health/walking/survey/?stripeV64=true
 ```
 
-(Use BASIC auth `dev` / `gPgFCeJ7`.)
+(Use BASIC auth `dev` / `<ask-the-project-owner>`.)
 
 In DevTools, identify the landing screen's:
 
@@ -2751,12 +2751,12 @@ Run:
 
 ```bash
 # Capture HTML using our UA-stub
-curl -u dev:gPgFCeJ7 \
+curl -u dev:<ask-the-project-owner> \
   -H "User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 19_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/19.0 Mobile/15E148 Safari/605.1.15" \
   "https://dev.slimkit.health/walking/survey/?stripeV64=true" > /tmp/with-stub-ua.html
 
 # Capture HTML with a known-real UA (Chrome DevTools iPhone 14 preset)
-curl -u dev:gPgFCeJ7 \
+curl -u dev:<ask-the-project-owner> \
   -H "User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1" \
   "https://dev.slimkit.health/walking/survey/?stripeV64=true" > /tmp/with-real-ua.html
 
