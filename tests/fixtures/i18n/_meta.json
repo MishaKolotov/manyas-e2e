@@ -275,7 +275,7 @@
       "key": "ВАЖНАЯ ИНФОРМАЦИЯ !!!!",
       "category": "MARKER",
       "sampleValues": {
-        "en": "актуальная таблица находится по этой ссылке:\nhttps://docs.google.com/spreadsheets/d/1Rzp4iq6qcAh7untkPPXRMYjZOvbRLF0tuwoyzPBZsuo/edit?gid=0#gid=0",
+        "en": "актуальная таблица находится по этой ссылке:\n<client-localisation-sheet-url>/edit?gid=0#gid=0",
         "ru": ""
       }
     },
@@ -1085,7 +1085,7 @@
       "key": "ВАЖНАЯ ИНФОРМАЦИЯ !!!!",
       "category": "MARKER",
       "sampleValues": {
-        "en": "актуальная таблица находится по этой ссылке:\nhttps://docs.google.com/spreadsheets/d/1Rzp4iq6qcAh7untkPPXRMYjZOvbRLF0tuwoyzPBZsuo/edit?gid=0#gid=0",
+        "en": "актуальная таблица находится по этой ссылке:\n<client-localisation-sheet-url>/edit?gid=0#gid=0",
         "ru": ""
       }
     }

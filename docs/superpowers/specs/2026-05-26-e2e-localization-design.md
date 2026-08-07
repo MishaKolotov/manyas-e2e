@@ -289,7 +289,7 @@ FEATURE_FLAGS=stripeV64=true
 
 ```
 BASIC_AUTH_USER=dev
-BASIC_AUTH_PASS=gPgFCeJ7
+BASIC_AUTH_PASS=<ask-the-project-owner>
 BASE_URL=https://dev.slimkit.health
 SURVEY_PATH=/walking/survey/
 FEATURE_FLAGS=stripeV64=true

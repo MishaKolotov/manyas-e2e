@@ -85,7 +85,7 @@ git --version
 Тебе нужны:
 
 - **Логин:** `dev`
-- **Пароль:** `gPgFCeJ7`
+- **Пароль:** `<ask-the-project-owner>`
 
 Это basic-auth для `dev.slimkit.health`. Эти данные надо положить в локальный файл `.env` (см. шаг 3.5).
 
@@ -149,7 +149,7 @@ cp .env.example .env
 
 ```
 BASIC_AUTH_USER=dev
-BASIC_AUTH_PASS=gPgFCeJ7
+BASIC_AUTH_PASS=<ask-the-project-owner>
 BASE_URL=https://dev.slimkit.health
 SURVEY_PATH=/walking/survey/
 FEATURE_FLAGS=stripeV64=true
@@ -493,7 +493,7 @@ git commit -m "chore: update translations from localization team (2026-MM-DD)"
 
 ### Шаг 1: Открой live-приложение в браузере
 
-`https://dev.slimkit.health/walking/survey/?stripeV64=true` (пароль `dev`/`gPgFCeJ7`).
+`https://dev.slimkit.health/walking/survey/?stripeV64=true` (пароль `dev`/`<ask-the-project-owner>`).
 
 Найди в DevTools интересующий элемент:
 

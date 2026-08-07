@@ -11,7 +11,7 @@ nvm use                       # Node 20
 npm install
 npm run install:browsers      # Chromium + WebKit (~500 MB)
 cp .env.example .env
-# edit .env: set BASIC_AUTH_USER=dev and BASIC_AUTH_PASS=gPgFCeJ7
+# edit .env: set BASIC_AUTH_USER=dev and BASIC_AUTH_PASS=<ask-the-project-owner>
 npm run i18n:import           # one-shot xlsx → JSON
 npm test                      # full matrix (~45 min)
 ```
